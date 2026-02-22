@@ -62,24 +62,57 @@ export default function PatientDetailPage() {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        // Basic client-side validation
+        if (file.size > 10 * 1024 * 1024) {
+            alert('حجم الملف يجب أن يكون أقل من 10 ميغابايت');
+            return;
+        }
+
         setUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('patientId', params.id as string);
 
         try {
+            // Import supabase dynamically to avoid issues
+            const { supabase } = await import('@/lib/supabase');
+
+            // Generate unique filename
+            const ext = file.name.split('.').pop();
+            const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+            const filePath = `patient-files/${filename}`;
+
+            // Upload directly to Supabase
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('patient-files')
+                .upload(filename, file);
+
+            if (uploadError) throw uploadError;
+
+            // Get public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('patient-files')
+                .getPublicUrl(filename);
+
+            // Notify our API to save the record
             const res = await fetch('/api/files', {
                 method: 'POST',
-                body: formData,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    patientId: params.id,
+                    filePath: publicUrl,
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileSize: file.size,
+                }),
             });
+
             const data = await res.json();
             if (data.success) {
                 fetchPatient();
             } else {
                 alert(data.error);
             }
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            console.error('Upload error:', error);
+            alert('حدث خطأ أثناء الرفع: ' + (error.message || error));
         } finally {
             setUploading(false);
         }

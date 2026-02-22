@@ -79,15 +79,42 @@ export default function ProfilePage() {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        // Validate image type
+        if (!file.type.startsWith('image/')) {
+            setMessage({ type: 'error', text: 'المجلد يجب أن يكون صورة' });
+            return;
+        }
+
         setUploading(true);
-        const formData = new FormData();
-        formData.append('file', file);
+        setMessage({ type: '', text: '' });
 
         try {
+            const { supabase } = await import('@/lib/supabase');
+
+            // Generate unique filename
+            const timestamp = Date.now();
+            const extension = file.name.split('.').pop();
+            const filename = `doctor-${session?.user.doctorId}-${timestamp}.${extension}`;
+
+            // Upload directly to Supabase
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('doctor-profiles')
+                .upload(filename, file, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            // Get public URL
+            const { data: { publicUrl } } = supabase.storage
+                .from('doctor-profiles')
+                .getPublicUrl(filename);
+
+            // Notify API
             const res = await fetch('/api/upload', {
                 method: 'POST',
-                body: formData,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: publicUrl }),
             });
+
             const data = await res.json();
             if (data.success) {
                 setForm(prev => ({ ...prev, profileImage: data.url }));
@@ -95,8 +122,9 @@ export default function ProfilePage() {
             } else {
                 setMessage({ type: 'error', text: data.error });
             }
-        } catch (error) {
-            setMessage({ type: 'error', text: 'حدث خطأ أثناء تحميل الصورة' });
+        } catch (error: any) {
+            console.error('Upload error:', error);
+            setMessage({ type: 'error', text: 'حدث خطأ أثناء تحميل الصورة: ' + (error.message || '') });
         } finally {
             setUploading(false);
         }
