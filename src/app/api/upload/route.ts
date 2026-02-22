@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
-import { mkdir } from 'fs/promises';
+import { supabase } from '@/lib/supabase';
+
+const SUPABASE_BUCKET = 'doctor-profiles'; // Ensure this bucket exists or use a common one
 
 export async function POST(request: NextRequest) {
     try {
@@ -42,29 +42,35 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
         // Create unique filename
         const timestamp = Date.now();
         const extension = file.name.split('.').pop();
-        const filename = `doctor-${session.user.doctorId}-${timestamp}.${extension}`;
+        const filename = `${session.user.doctorId}/${timestamp}.${extension}`;
 
-        const uploadDir = join(process.cwd(), 'public', 'uploads');
+        // Upload to Supabase Storage
+        const { data, error: uploadError } = await supabase.storage
+            .from(SUPABASE_BUCKET)
+            .upload(filename, file, {
+                cacheControl: '3600',
+                upsert: true
+            });
 
-        // Ensure directory exists
-        try {
-            await mkdir(uploadDir, { recursive: true });
-        } catch (e) {
-            // Directory might already exist
+        if (uploadError) {
+            console.error('[Supabase Profile Upload Error]:', uploadError);
+            return NextResponse.json(
+                { success: false, error: 'فشل تحميل الصورة إلى التخزين السحابي' },
+                { status: 500 }
+            );
         }
 
-        const path = join(uploadDir, filename);
-        await writeFile(path, buffer);
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+            .from(SUPABASE_BUCKET)
+            .getPublicUrl(filename);
 
         return NextResponse.json({
             success: true,
-            url: `/uploads/${filename}`,
+            url: publicUrl,
         });
     } catch (error) {
         console.error('Upload error:', error);

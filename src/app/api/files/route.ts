@@ -1,12 +1,11 @@
-import path from 'path';
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { writeFile, mkdir } from 'fs/promises';
 import prisma from '@/lib/prisma';
 import { authOptions } from '@/lib/auth';
+import { supabase } from '@/lib/supabase';
 
-const UPLOAD_DIR = process.env.UPLOAD_DIR || path.resolve(process.cwd(), 'public', 'uploads');
 const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE_MB || '10') * 1024 * 1024;
+const SUPABASE_BUCKET = 'patient-files';
 
 // GET /api/files - List files for a patient
 export async function GET(request: NextRequest) {
@@ -51,7 +50,7 @@ export async function GET(request: NextRequest) {
     }
 }
 
-// POST /api/files - Upload file
+// POST /api/files - Upload file to Supabase
 export async function POST(request: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
@@ -127,34 +126,42 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Create upload directory
-        const uploadPath = path.join(UPLOAD_DIR, doctorId.toString());
-        console.log(`[Upload] Doctor: ${doctorId}, Uploading to: ${uploadPath}`);
-        await mkdir(uploadPath, { recursive: true });
+        // Generate unique filename for Supabase
+        const ext = file.name.split('.').pop();
+        const filename = `${doctorId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
 
-        // Generate unique filename
-        const ext = path.extname(file.name);
-        const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}${ext}`;
-        const filePath = path.join(uploadPath, filename);
-        console.log(`[Upload] Full file path: ${filePath}`);
+        // Upload to Supabase Storage
+        const { data, error: uploadError } = await supabase.storage
+            .from(SUPABASE_BUCKET)
+            .upload(filename, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
 
-        // Save file
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        await writeFile(filePath, buffer);
+        if (uploadError) {
+            console.error('[Supabase Upload Error]:', uploadError);
+            return NextResponse.json(
+                { success: false, error: 'فشل رفع الملف إلى التخزين السحابي' },
+                { status: 500 }
+            );
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+            .from(SUPABASE_BUCKET)
+            .getPublicUrl(filename);
 
         // Create database record
         const patientFile = await prisma.patientFile.create({
             data: {
                 patientId: parseInt(patientId),
                 doctorId,
-                filePath: `/uploads/${doctorId}/${filename}`,
+                filePath: publicUrl,
                 fileName: file.name,
                 fileType: file.type,
                 fileSize: file.size,
             },
         });
-        console.log(`[Upload] DB Record created with ID: ${patientFile.id}, Path: ${patientFile.filePath}`);
 
         return NextResponse.json({
             success: true,
