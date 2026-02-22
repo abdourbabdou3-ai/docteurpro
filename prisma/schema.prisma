@@ -1,0 +1,194 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// =====================
+// USER & AUTHENTICATION
+// =====================
+
+// Note: SQLite does not support native enums.
+// UserRole: DOCTOR, ADMIN
+// UserStatus: PENDING, ACTIVE, SUSPENDED
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         String   @default("DOCTOR")
+  status       String   @default("PENDING")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  doctor Doctor?
+
+  @@map("users")
+}
+
+// =====================
+// DOCTOR
+// =====================
+
+model Doctor {
+  id            Int      @id @default(autoincrement())
+  userId        Int      @unique @map("user_id")
+  name          String
+  specialty     String
+  city          String
+  clinicAddress String?  @map("clinic_address")
+  workingHours  String?  @map("working_hours") // { "sunday": { "start": "09:00", "end": "17:00" }, ... }
+  priceRange    String?  @map("price_range") // e.g., "2000-5000 DZD"
+  profileImage  String?  @map("profile_image")
+  phone         String?
+  bio           String?
+  approved      Boolean  @default(false)
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  user          User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments  Appointment[]
+  patientFiles  PatientFile[]
+  subscriptions DoctorSubscription[]
+  reviews       Review[]
+
+  @@index([specialty])
+  @@index([city])
+  @@index([approved])
+  @@map("doctors")
+}
+
+// =====================
+// PATIENT
+// =====================
+
+model Patient {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String
+  email     String?
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  appointments Appointment[]
+  files        PatientFile[]
+
+  @@map("patients")
+}
+
+// =====================
+// APPOINTMENT
+// =====================
+
+// AppointmentStatus: PENDING, CONFIRMED, COMPLETED, CANCELLED
+
+model Appointment {
+  id          Int      @id @default(autoincrement())
+  doctorId    Int      @map("doctor_id")
+  patientId   Int      @map("patient_id")
+  date        DateTime
+  time        String   // e.g., "14:30"
+  status      String   @default("PENDING")
+  notes       String?
+  actualPrice Float?   @map("actual_price") // Price charged on completion
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  doctor  Doctor  @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  @@index([doctorId])
+  @@index([date])
+  @@index([status])
+  @@map("appointments")
+}
+
+// =====================
+// PATIENT FILES
+// =====================
+
+model PatientFile {
+  id         Int      @id @default(autoincrement())
+  patientId  Int      @map("patient_id")
+  doctorId   Int      @map("doctor_id")
+  filePath   String   @map("file_path")
+  fileName   String   @map("file_name")
+  fileType   String   @map("file_type") // e.g., "application/pdf", "image/jpeg"
+  fileSize   Int      @map("file_size") // in bytes
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+
+  patient Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  doctor  Doctor  @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("patient_files")
+}
+
+// =====================
+// SUBSCRIPTION PLANS
+// =====================
+
+model SubscriptionPlan {
+  id              Int      @id @default(autoincrement())
+  name            String
+  nameAr          String   @map("name_ar") // Arabic name
+  description     String?
+  descriptionAr   String?  @map("description_ar")
+  price           Float
+  maxAppointments Int      @map("max_appointments")
+  maxStorageMb    Int      @map("max_storage_mb")
+  priority        Int      @default(0) // Higher = more visible
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  doctorSubscriptions DoctorSubscription[]
+
+  @@map("subscription_plans")
+}
+
+// =====================
+// DOCTOR SUBSCRIPTIONS
+// =====================
+
+// SubscriptionStatus: PENDING, ACTIVE, EXPIRED, CANCELLED
+
+model DoctorSubscription {
+  id        Int       @id @default(autoincrement())
+  doctorId  Int       @map("doctor_id")
+  planId    Int       @map("plan_id")
+  status    String    @default("PENDING")
+  startDate DateTime? @map("start_date")
+  endDate   DateTime? @map("end_date")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  doctor Doctor           @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  plan   SubscriptionPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@map("doctor_subscriptions")
+}
+
+// =====================
+// REVIEWS
+// =====================
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  doctorId    Int      @map("doctor_id")
+  patientName String   @map("patient_name")
+  rating      Int      // 1-5
+  comment     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}

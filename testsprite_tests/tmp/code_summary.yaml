@@ -1,0 +1,104 @@
+version: "2"
+type: frontend
+tech_stack:
+  - TypeScript
+  - Next.js 14
+  - React 18
+  - Prisma
+  - NextAuth.js
+  - Vanilla CSS
+routes:
+  - path: /
+    file: src/app/page.tsx
+    auth_required: false
+    description: Home page with doctor search and hero section
+  - path: /doctors
+    file: src/app/doctors/page.tsx
+    auth_required: false
+    description: List of all doctors with filters
+  - path: /about
+    file: src/app/about/page.tsx
+    auth_required: false
+    description: About the platform page
+  - path: /contact
+    file: src/app/contact/page.tsx
+    auth_required: false
+    description: Contact form page
+  - path: /login
+    file: src/app/login/page.tsx
+    auth_required: false
+    description: User login page
+  - path: /register
+    file: src/app/register/page.tsx
+    auth_required: false
+    description: Doctor registration page
+  - path: /dashboard
+    file: src/app/dashboard/page.tsx
+    auth_required: true
+    description: Doctor dashboard for managing appointments
+  - path: /admin
+    file: src/app/admin/page.tsx
+    auth_required: true
+    description: Admin panel for platform management
+features:
+  - name: Doctor Search and Listing
+    description: Users can search for doctors by specialty and city
+    files:
+      - src/app/page.tsx
+      - src/app/doctors/page.tsx
+      - src/app/api/doctors/route.ts
+    entry_route: /doctors
+    user_interactions:
+      - Enter specialty or city in search bars
+      - Click search button
+      - View doctor cards with ratings and prices
+    api_calls:
+      - method: GET
+        endpoint: /api/doctors
+    auth_required: false
+  - name: Appointment Booking
+    description: Patients can book appointments with doctors
+    files:
+      - src/app/doctors/[id]/page.tsx
+      - src/app/api/appointments/route.ts
+    entry_route: /doctors/[id]
+    user_interactions:
+      - Select a date and time slot
+      - Fill patient information (name, phone)
+      - Confirm booking
+    api_calls:
+      - method: POST
+        endpoint: /api/appointments
+    auth_required: false
+  - name: Doctor Authentication
+    description: Doctors can login and register
+    files:
+      - src/app/login/page.tsx
+      - src/app/register/page.tsx
+      - src/app/api/auth/[...nextauth]/route.ts
+    entry_route: /login
+    user_interactions:
+      - Fill login/register forms
+      - Submit credentials
+    api_calls:
+      - method: POST
+        endpoint: /api/auth/callback/credentials
+    auth_required: false
+  - name: Doctor Dashboard
+    description: Doctors manage their appointments and profile
+    files:
+      - src/app/dashboard/page.tsx
+      - src/app/api/dashboard/stats/route.ts
+    entry_route: /dashboard
+    user_interactions:
+      - View appointment statistics
+      - Manage upcoming appointments
+      - Update profile settings
+    api_calls:
+      - method: GET
+        endpoint: /api/dashboard/stats
+    auth_required: true
+known_limitations:
+  - issue: Database connection to Supabase is currently unstable (P1001)
+    location: src/lib/prisma.ts
+    impact: API routes fetching data from DB will return 500 errors until fixed or migrated

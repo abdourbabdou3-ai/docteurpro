@@ -1,0 +1,927 @@
+[
+  {
+    "id": "TC001",
+    "title": "Search doctors from /doctors and verify results list renders doctor cards",
+    "description": "Verifies that searching by specialty or city from the doctors listing page shows doctor cards with rating and price information.",
+    "category": "Doctor Search and Listing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"الأطباء\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"طبيب عام\" into the specialty search field"
+      },
+      {
+        "type": "action",
+        "description": "Click search button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rating\" is visible within a doctor card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Price\" is visible within a doctor card"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Search doctors from home page and verify results are displayed",
+    "description": "Verifies that searching by specialty or city from the home page shows doctor cards with rating and price information.",
+    "category": "Doctor Search and Listing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Search\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"الجزائر\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Click search button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/doctors\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Price\" is visible within a doctor card"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Search with no matches shows 'No results found' message",
+    "description": "Verifies that an empty result set displays a clear no-results message on the doctors listing page.",
+    "category": "Doctor Search and Listing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Type \"تخصص-غير-موجود-999\" into the specialty search field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"مدينة-غير-موجودة-999\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Click search button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No results found\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor card\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Specialty-only search returns doctors and keeps city filter empty",
+    "description": "Verifies that searching with only a specialty still returns results and does not require a city value.",
+    "category": "Doctor Search and Listing",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Type \"قلب\" into the specialty search field"
+      },
+      {
+        "type": "action",
+        "description": "Click search button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rating\" is visible within a doctor card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Price\" is visible within a doctor card"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "City-only search returns doctors and keeps specialty filter empty",
+    "description": "Verifies that searching with only a city still returns results and does not require a specialty value.",
+    "category": "Doctor Search and Listing",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Type \"وهران\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Click search button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rating\" is visible within a doctor card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Price\" is visible within a doctor card"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Clear/empty search does not crash and still renders a listing state",
+    "description": "Verifies that submitting search with empty filters does not break the page and shows a stable listing state (results or an informative message).",
+    "category": "Doctor Search and Listing",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Search\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click search button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Rating\" is visible within a doctor card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Price\" is visible within a doctor card"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Search handles Arabic input and whitespace robustly",
+    "description": "Verifies that Arabic search terms with leading/trailing spaces still produce a stable and correct UI response.",
+    "category": "Doctor Search and Listing",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Type \"  جلدية  \" into the specialty search field"
+      },
+      {
+        "type": "action",
+        "description": "Click search button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor card\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Price\" is visible within a doctor card"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "View doctor details page and see appointment booking section",
+    "description": "Verifies that a patient can open a doctor profile from the doctors list and see the booking UI (date/time slots and patient info fields).",
+    "category": "Appointment Booking",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"doctors\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the first doctor card in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Appointment booking\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Date and time slots\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Patient name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Phone\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Successful booking flow up to confirmation (if backend available)",
+    "description": "Verifies the end-to-end booking steps from selecting a time slot through confirming, ending with a visible confirmation message when saving succeeds.",
+    "category": "Appointment Booking",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first doctor card in the list"
+      },
+      {
+        "type": "action",
+        "description": "Select a date and time slot"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test Patient\" into the \"Patient name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"0555123456\" into the \"Phone\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Confirm booking\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Booking confirmed\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Phone is required validation when confirming booking",
+    "description": "Verifies that confirming a booking without a phone number shows a visible validation error indicating the phone field is required.",
+    "category": "Appointment Booking",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first doctor card in the list"
+      },
+      {
+        "type": "action",
+        "description": "Select a date and time slot"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test Patient\" into the \"Patient name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Confirm booking\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Phone is required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Cannot confirm booking without selecting a time slot",
+    "description": "Verifies that the user cannot proceed to a successful booking confirmation if no date/time slot is selected.",
+    "category": "Appointment Booking",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first doctor card in the list"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test Patient\" into the \"Patient name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"0555123456\" into the \"Phone\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Confirm booking\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Select a date and time\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Phone field rejects obviously invalid short value (client-side validation)",
+    "description": "Verifies that entering an obviously invalid phone value triggers a visible validation message and prevents confirmation.",
+    "category": "Appointment Booking",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /doctors"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first doctor card in the list"
+      },
+      {
+        "type": "action",
+        "description": "Select a date and time slot"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test Patient\" into the \"Patient name\" field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"123\" into the \"Phone\" field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Confirm booking\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Invalid phone\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Login then open Doctor Dashboard and see core dashboard UI",
+    "description": "Verifies an authenticated doctor can reach the dashboard and see key dashboard sections render.",
+    "category": "Doctor Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Login\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"إحصائيات\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"المواعيد القادمة\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Confirm an upcoming appointment from its details card",
+    "description": "Verifies a doctor can open an upcoming appointment and confirm it, and the status updates on-screen.",
+    "category": "Doctor Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Login\""
+      },
+      {
+        "type": "action",
+        "description": "Click on an upcoming appointment card"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"تأكيد\" (Confirm)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تم التأكيد\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Cancel an upcoming appointment from its details card",
+    "description": "Verifies a doctor can cancel an upcoming appointment and the status updates on-screen.",
+    "category": "Doctor Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Login\""
+      },
+      {
+        "type": "action",
+        "description": "Click on an upcoming appointment card"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"إلغاء\" (Cancel)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تم الإلغاء\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "Complete an appointment when the option is available",
+    "description": "Verifies a doctor can mark an appointment as completed and see the updated status.",
+    "category": "Doctor Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Login\""
+      },
+      {
+        "type": "action",
+        "description": "Click on an upcoming appointment card"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"إكمال\" (Complete)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"مكتمل\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Update doctor profile settings from the dashboard",
+    "description": "Verifies a doctor can open profile settings and save a change with visible confirmation.",
+    "category": "Doctor Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Login\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"إعدادات الملف الشخصي\" (Profile settings)"
+      },
+      {
+        "type": "action",
+        "description": "Type \"تحديث\" into the biography/description field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"حفظ\" (Save)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تم الحفظ\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Update working hours from the dashboard",
+    "description": "Verifies a doctor can change working hours and see a visible success state.",
+    "category": "Doctor Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Login\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"ساعات العمل\" (Working hours)"
+      },
+      {
+        "type": "action",
+        "description": "Select an available start time option from the start time dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"حفظ\" (Save)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تم الحفظ\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Admin approves a doctor application and sees status updated",
+    "description": "Verifies an authenticated admin can open the admin panel, approve a doctor application, and see the application status change to approved.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Admin\" link/button in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Admin views doctor applications list (happy path visibility check)",
+    "description": "Verifies an authenticated admin can reach the admin panel and see the doctor applications list area render.",
+    "category": "Admin Panel",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/dashboard\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Admin\" link/button in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"طلبات الأطباء\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Doctor applications list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Admin approves a doctor application from the applications list",
+    "description": "Verifies the approve action is available and results in a visible approved state for a selected doctor application.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Admin\" link/button in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Approve\" button for the first pending doctor application"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تمت الموافقة\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Admin updates a subscription package and sees confirmation",
+    "description": "Verifies an authenticated admin can edit subscription package details and sees a visible success confirmation.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Admin\" link/button in the app navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Subscription Packages\" tab/section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"الباقات\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Edit\" button for the first subscription package"
+      },
+      {
+        "type": "action",
+        "description": "Type \"تحديث\" into the package name field"
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Admin saves subscription package changes and sees updated values",
+    "description": "Verifies saving subscription package edits shows a success message and the updated package details are visible in the list/details view.",
+    "category": "Admin Panel",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Admin\" link/button in the app navigation"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Subscription Packages\" tab/section"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Edit\" button for the first subscription package"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"تم التحديث بنجاح\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Non-admin user is blocked from accessing the admin panel (permissions)",
+    "description": "Verifies a logged-in non-admin cannot access the admin panel and sees an insufficient permissions or 403 message.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"nonadmin@example.com\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"wrong-nonadmin-password\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"غير مصرح\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"403\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Admin sees a loading indicator before admin data renders",
+    "description": "Verifies the admin panel displays a visible loading state while fetching admin data, then transitions to content or an error message.",
+    "category": "Admin Panel",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /login"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Login\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Admin\" link/button in the app navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"جار التحميل\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Admin content area\" is visible"
+      }
+    ]
+  }
+]

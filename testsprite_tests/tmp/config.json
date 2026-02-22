@@ -1,0 +1,19 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "loginUser": "admin@docteur.dz",
+  "loginPassword": "admin123",
+  "executionArgs": {
+    "projectName": "docteur",
+    "projectPath": "c:\\Users\\ABDOU\\OneDrive\\Desktop\\docteur",
+    "testIds": [],
+    "additionalInstruction": "Analyze all routes and ensure basic navigation and form submissions work correctly. Check for 500 errors on API routes due to DB connectivity concerns mentioned in code summary.",
+    "envs": {
+      "API_KEY": "sk-user-UkTDLBnHiIuojh-4BVmj6lfqXuSx3i-zxXKysGGlLFisLX6Oq_eMjhEotkQkyDAhVqk3wHqI6yb2yZ6Nn4QVFzOfSAzLVaCImRGnyNYA4RVg8t8WfFWsdW8Xqjj_sikFuKk"
+    }
+  },
+  "serverPort": 49532,
+  "proxy": "http://7a287d07-e005-41e9-bffd-f8ee0669f4bb:Tqdo6AH9tbh0HwQLBk0iPcjsQ5iA6O4P@tun.testsprite.com:8080"
+}
