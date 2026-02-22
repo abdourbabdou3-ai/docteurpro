@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { formatDateAr } from '@/lib/utils';
 
 interface Patient {
@@ -20,11 +20,7 @@ export default function PatientsPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
 
-    useEffect(() => {
-        fetchPatients();
-    }, []);
-
-    const fetchPatients = async () => {
+    const fetchPatients = useCallback(async () => {
         try {
             const params = search ? `?search=${encodeURIComponent(search)}` : '';
             const res = await fetch(`/api/patients${params}`);
@@ -37,14 +33,18 @@ export default function PatientsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [search]);
+
+    useEffect(() => {
+        fetchPatients();
+    }, [fetchPatients]);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             fetchPatients();
         }, 300);
         return () => clearTimeout(timer);
-    }, [search]);
+    }, [search, fetchPatients]);
 
     if (loading) {
         return (

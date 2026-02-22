@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { algerianWilayas, medicalSpecialties } from '@/lib/utils';
+import Image from 'next/image';
 
 interface Doctor {
     id: number;
@@ -35,9 +36,6 @@ export default function DoctorsPage() {
         page: 1,
     });
 
-    useEffect(() => {
-        fetchDoctors();
-    }, [filters]);
 
     useEffect(() => {
         const fetchSpecialties = async () => {
@@ -54,7 +52,7 @@ export default function DoctorsPage() {
         fetchSpecialties();
     }, []);
 
-    const fetchDoctors = async () => {
+    const fetchDoctors = useCallback(async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
@@ -76,7 +74,11 @@ export default function DoctorsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filters]);
+
+    useEffect(() => {
+        fetchDoctors();
+    }, [fetchDoctors]);
 
     return (
         <>
@@ -198,11 +200,11 @@ export default function DoctorsPage() {
                                     <div key={doctor.id} className="doctor-card">
                                         <div className="doctor-card-image" style={{ position: 'relative', height: '200px' }}>
                                             {doctor.profileImage ? (
-                                                <img
+                                                <Image
                                                     src={doctor.profileImage}
                                                     alt={doctor.name}
-                                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                    loading="lazy"
+                                                    fill
+                                                    style={{ objectFit: 'cover' }}
                                                 />
                                             ) : (
                                                 <div style={{

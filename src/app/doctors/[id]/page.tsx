@@ -1,9 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { formatDateAr, formatTimeAr, arabicDays, generateTimeSlots } from '@/lib/utils';
+import Image from 'next/image';
 
 interface Doctor {
     id: number;
@@ -180,11 +181,28 @@ export default function DoctorProfilePage() {
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
 
+    const fetchDoctor = useCallback(async () => {
+        try {
+            const res = await fetch(`/api/doctors/${params.id}`);
+            const data = await res.json();
+
+            if (data.success) {
+                setDoctor(data.data);
+            } else {
+                router.push('/doctors');
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    }, [params.id, router]);
+
     useEffect(() => {
         if (params.id) {
             fetchDoctor();
         }
-    }, [params.id]);
+    }, [params.id, fetchDoctor]);
 
     useEffect(() => {
         if (selectedDate && doctor?.workingHours) {
@@ -200,24 +218,7 @@ export default function DoctorProfilePage() {
             }
             setSelectedTime('');
         }
-    }, [selectedDate, doctor]);
-
-    const fetchDoctor = async () => {
-        try {
-            const res = await fetch(`/api/doctors/${params.id}`);
-            const data = await res.json();
-
-            if (data.success) {
-                setDoctor(data.data);
-            } else {
-                router.push('/doctors');
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [selectedDate, doctor?.workingHours]);
 
     const handleBooking = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -318,11 +319,11 @@ export default function DoctorProfilePage() {
                                         }}
                                     >
                                         {doctor.profileImage ? (
-                                            <img
+                                            <Image
                                                 src={doctor.profileImage}
                                                 alt={doctor.name}
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                                loading="lazy"
+                                                fill
+                                                style={{ objectFit: 'cover' }}
                                             />
                                         ) : (
                                             <div style={{

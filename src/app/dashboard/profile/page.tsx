@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { algerianWilayas, medicalSpecialties, arabicDays } from '@/lib/utils';
 import Image from 'next/image';
@@ -39,13 +39,7 @@ export default function ProfilePage() {
         workingHours: {} as Record<string, { start: string; end: string } | null>,
     });
 
-    useEffect(() => {
-        if (session?.user.doctorId) {
-            fetchProfile();
-        }
-    }, [session]);
-
-    const fetchProfile = async () => {
+    const fetchProfile = useCallback(async () => {
         try {
             const res = await fetch(`/api/doctors/${session?.user.doctorId}`);
             const data = await res.json();
@@ -73,7 +67,13 @@ export default function ProfilePage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [session?.user.doctorId]);
+
+    useEffect(() => {
+        if (session?.user.doctorId) {
+            fetchProfile();
+        }
+    }, [session?.user.doctorId, fetchProfile]);
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -223,10 +223,11 @@ export default function ProfilePage() {
                                     position: 'relative'
                                 }}>
                                     {form.profileImage ? (
-                                        <img
+                                        <Image
                                             src={form.profileImage}
                                             alt="Profile"
-                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                            fill
+                                            style={{ objectFit: 'cover' }}
                                         />
                                     ) : (
                                         <div className="flex-center" style={{ height: '100%', color: 'var(--gray-400)' }}>

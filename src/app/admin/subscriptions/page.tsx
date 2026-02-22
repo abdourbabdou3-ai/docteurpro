@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { formatDateAr, formatCurrency, subscriptionStatusAr } from '@/lib/utils';
 
 interface Subscription {
@@ -25,11 +25,7 @@ export default function AdminSubscriptionsPage() {
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState('PENDING');
 
-    useEffect(() => {
-        fetchSubscriptions();
-    }, [filter]);
-
-    const fetchSubscriptions = async () => {
+    const fetchSubscriptions = useCallback(async () => {
         setLoading(true);
         try {
             const res = await fetch(`/api/admin/subscriptions?status=${filter}`);
@@ -42,7 +38,11 @@ export default function AdminSubscriptionsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filter]);
+
+    useEffect(() => {
+        fetchSubscriptions();
+    }, [fetchSubscriptions]);
 
     const handleAction = async (id: number, action: string) => {
         if (!confirm(`هل أنت متأكد من هذا الإجراء؟`)) return;
@@ -125,8 +125,8 @@ export default function AdminSubscriptionsPage() {
                                     <td>{formatCurrency(sub.plan.price)}</td>
                                     <td>
                                         <span className={`badge badge-${sub.status === 'PENDING' ? 'warning' :
-                                                sub.status === 'ACTIVE' ? 'success' :
-                                                    sub.status === 'EXPIRED' ? 'info' : 'danger'
+                                            sub.status === 'ACTIVE' ? 'success' :
+                                                sub.status === 'EXPIRED' ? 'info' : 'danger'
                                             }`}>
                                             {subscriptionStatusAr[sub.status]}
                                         </span>

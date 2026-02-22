@@ -98,28 +98,3 @@ export async function POST(request: NextRequest) {
     }
 }
 
-// Create database record
-const patientFile = await prisma.patientFile.create({
-    data: {
-        patientId: parseInt(patientId),
-        doctorId,
-        filePath: publicUrl,
-        fileName: file.name,
-        fileType: file.type,
-        fileSize: file.size,
-    },
-});
-
-return NextResponse.json({
-    success: true,
-    message: 'تم رفع الملف بنجاح',
-    data: patientFile,
-});
-    } catch (error) {
-    console.error('Error uploading file:', error);
-    return NextResponse.json(
-        { success: false, error: 'حدث خطأ أثناء رفع الملف' },
-        { status: 500 }
-    );
-}
-}

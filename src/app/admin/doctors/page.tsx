@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { formatDateAr, userStatusAr } from '@/lib/utils';
 
@@ -34,11 +34,7 @@ export default function AdminDoctorsPage() {
     const [filter, setFilter] = useState(searchParams.get('status') || 'all');
     const [search, setSearch] = useState('');
 
-    useEffect(() => {
-        fetchDoctors();
-    }, [filter, search]);
-
-    const fetchDoctors = async () => {
+    const fetchDoctors = useCallback(async () => {
         setLoading(true);
         try {
             const params = new URLSearchParams();
@@ -55,7 +51,11 @@ export default function AdminDoctorsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [filter, search]);
+
+    useEffect(() => {
+        fetchDoctors();
+    }, [fetchDoctors]);
 
     const handleAction = async (doctorId: number, action: string) => {
         if (!confirm(`هل أنت متأكد من هذا الإجراء؟`)) return;

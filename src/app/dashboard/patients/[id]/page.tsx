@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { formatDateAr, formatTimeAr, formatFileSize, appointmentStatusAr } from '@/lib/utils';
@@ -37,13 +37,7 @@ export default function PatientDetailPage() {
     const [editNotes, setEditNotes] = useState(false);
     const [notes, setNotes] = useState('');
 
-    useEffect(() => {
-        if (params.id) {
-            fetchPatient();
-        }
-    }, [params.id]);
-
-    const fetchPatient = async () => {
+    const fetchPatient = useCallback(async () => {
         try {
             const res = await fetch(`/api/patients/${params.id}`);
             const data = await res.json();
@@ -56,7 +50,13 @@ export default function PatientDetailPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [params.id]);
+
+    useEffect(() => {
+        if (params.id) {
+            fetchPatient();
+        }
+    }, [params.id, fetchPatient]);
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

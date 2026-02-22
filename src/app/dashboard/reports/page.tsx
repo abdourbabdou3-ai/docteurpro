@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { formatDateAr, formatCurrency, appointmentStatusAr } from '@/lib/utils';
 
 interface ReportData {
@@ -30,11 +30,7 @@ export default function ReportsPage() {
         return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
     });
 
-    useEffect(() => {
-        fetchReportData();
-    }, [month]);
-
-    const fetchReportData = async () => {
+    const fetchReportData = useCallback(async () => {
         setLoading(true);
         try {
             const [year, monthNum] = month.split('-').map(Number);
@@ -71,7 +67,11 @@ export default function ReportsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [month]);
+
+    useEffect(() => {
+        fetchReportData();
+    }, [fetchReportData]);
 
     const generatePDF = async () => {
         if (!data) return;
