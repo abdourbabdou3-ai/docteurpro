@@ -68,6 +68,7 @@ export default function PatientDetailPage() {
             return;
         }
 
+        console.log('🚀 handleFileUpload: Starting Refactored Client-side Upload Logic');
         setUploading(true);
 
         try {
@@ -94,13 +95,17 @@ export default function PatientDetailPage() {
             // Notify our API to save the record
             const res = await fetch('/api/files', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Client-Version': 'supabase-refactor-v2'
+                },
                 body: JSON.stringify({
                     patientId: params.id,
                     filePath: publicUrl,
                     fileName: file.name,
                     fileType: file.type,
                     fileSize: file.size,
+                    timestamp: Date.now()
                 }),
             });
 

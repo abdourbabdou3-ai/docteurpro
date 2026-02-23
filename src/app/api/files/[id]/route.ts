@@ -77,14 +77,6 @@ export async function DELETE(
             );
         }
 
-        // Delete physical file
-        try {
-            const filePath = path.join(process.cwd(), 'public', file.filePath);
-            await unlink(filePath);
-        } catch (err) {
-            console.error('Error deleting physical file:', err);
-        }
-
         // Delete database record
         await prisma.patientFile.delete({
             where: { id },
