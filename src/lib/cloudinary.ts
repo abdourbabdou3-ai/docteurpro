@@ -6,8 +6,7 @@ export const cloudinaryConfig = {
 // Determine the correct resource type for Cloudinary
 export const getResourceType = (fileType: string): string => {
     if (fileType.startsWith('image/')) return 'image';
-    if (fileType === 'application/pdf') return 'image'; // Cloudinary can handle PDFs as images
-    return 'raw'; // For DOC, XLS, etc.
+    return 'raw'; // PDF, DOC, XLS, DICOM, etc. → raw for direct viewing/download
 };
 
 export const getCloudinaryUploadUrl = (fileType: string) => {
