@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { unlink, readFile } from 'fs/promises';
-import path from 'path';
 import prisma from '@/lib/prisma';
 import { authOptions } from '@/lib/auth';
 
-// GET /api/files/[id] - Redirect to Supabase URL
+// GET /api/files/[id] - Redirect to Cloudinary URL
 export async function GET(
     request: NextRequest,
     { params }: { params: { id: string } }

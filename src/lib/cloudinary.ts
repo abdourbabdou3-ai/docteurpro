@@ -4,4 +4,4 @@ export const cloudinaryConfig = {
 };
 
 export const getCloudinaryUploadUrl = () =>
-    `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/upload`;
+    `https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/auto/upload`;

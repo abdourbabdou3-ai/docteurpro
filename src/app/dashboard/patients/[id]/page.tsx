@@ -63,8 +63,8 @@ export default function PatientDetailPage() {
         if (!file) return;
 
         // Basic client-side validation
-        if (file.size > 10 * 1024 * 1024) {
-            alert('حجم الملف يجب أن يكون أقل من 10 ميغابايت');
+        if (file.size > 20 * 1024 * 1024) {
+            alert('حجم الملف يجب أن يكون أقل من 20 ميغابايت');
             return;
         }
 
@@ -237,7 +237,7 @@ export default function PatientDetailPage() {
                                 {uploading ? 'جاري الرفع...' : 'رفع ملف'}
                                 <input
                                     type="file"
-                                    accept=".pdf,.jpg,.jpeg,.png,.webp"
+                                    accept=".pdf,.jpg,.jpeg,.png,.webp,.doc,.docx,.xls,.xlsx,.txt,.dicom,.dcm"
                                     onChange={handleFileUpload}
                                     disabled={uploading}
                                     style={{ display: 'none' }}
