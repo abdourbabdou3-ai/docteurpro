@@ -279,7 +279,7 @@ export default function PatientDetailPage() {
                                                 </div>
                                             </div>
                                             <div className="flex gap-xs">
-                                                <a href={`/api/files/${file.id}`} target="_blank" className="btn btn-ghost btn-sm">
+                                                <a href={file.filePath} target="_blank" rel="noopener noreferrer" className="btn btn-ghost btn-sm">
                                                     عرض
                                                 </a>
                                                 <button className="btn btn-ghost btn-sm" onClick={() => handleDeleteFile(file.id)}>
