@@ -95,7 +95,7 @@ export default function ProfilePage() {
             formData.append('file', file);
             formData.append('upload_preset', cloudinaryConfig.uploadPreset);
 
-            const uploadRes = await fetch(getCloudinaryUploadUrl(), {
+            const uploadRes = await fetch(getCloudinaryUploadUrl(file.type), {
                 method: 'POST',
                 body: formData,
             });
