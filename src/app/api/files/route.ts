@@ -2,10 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import prisma from '@/lib/prisma';
 import { authOptions } from '@/lib/auth';
-import { supabase } from '@/lib/supabase';
-
-const MAX_FILE_SIZE = parseInt(process.env.MAX_FILE_SIZE_MB || '10') * 1024 * 1024;
-const SUPABASE_BUCKET = 'patient-files';
 
 // GET /api/files - List files for a patient
 export async function GET(request: NextRequest) {
@@ -50,7 +46,7 @@ export async function GET(request: NextRequest) {
     }
 }
 
-// POST /api/files - Notification from client after successful Supabase upload
+// POST /api/files - Notification from client after successful Cloudinary upload
 export async function POST(request: NextRequest) {
     try {
         const session = await getServerSession(authOptions);

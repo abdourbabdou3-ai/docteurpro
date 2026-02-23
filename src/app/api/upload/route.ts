@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { supabase } from '@/lib/supabase';
 
-const SUPABASE_BUCKET = 'doctor-profiles'; // Ensure this bucket exists or use a common one
-
-// POST /api/upload - Notification from client after successful profile image upload
+// POST /api/upload - Notification from client after successful Cloudinary upload
 export async function POST(request: NextRequest) {
     try {
         const session = await getServerSession(authOptions);

@@ -68,36 +68,35 @@ export default function PatientDetailPage() {
             return;
         }
 
-        console.log('🚀 handleFileUpload: Starting Refactored Client-side Upload Logic');
+        console.log('🚀 handleFileUpload: Starting Cloudinary Client-side Upload Logic');
         setUploading(true);
 
         try {
-            // Import supabase dynamically to avoid issues
-            const { supabase } = await import('@/lib/supabase');
+            const { getCloudinaryUploadUrl, cloudinaryConfig } = await import('@/lib/cloudinary');
 
-            // Generate unique filename
-            const ext = file.name.split('.').pop();
-            const filename = `${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
-            const filePath = `patient-files/${filename}`;
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', cloudinaryConfig.uploadPreset);
 
-            // Upload directly to Supabase
-            const { data: uploadData, error: uploadError } = await supabase.storage
-                .from('patient-files')
-                .upload(filename, file);
+            const uploadRes = await fetch(getCloudinaryUploadUrl(), {
+                method: 'POST',
+                body: formData,
+            });
 
-            if (uploadError) throw uploadError;
+            const uploadData = await uploadRes.json();
 
-            // Get public URL
-            const { data: { publicUrl } } = supabase.storage
-                .from('patient-files')
-                .getPublicUrl(filename);
+            if (!uploadRes.ok) {
+                throw new Error(uploadData.error?.message || 'فشل تحميل الملف إلى Cloudinary');
+            }
+
+            const publicUrl = uploadData.secure_url;
 
             // Notify our API to save the record
             const res = await fetch('/api/files', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Client-Version': 'supabase-refactor-v2'
+                    'X-Client-Version': 'cloudinary-v1'
                 },
                 body: JSON.stringify({
                     patientId: params.id,

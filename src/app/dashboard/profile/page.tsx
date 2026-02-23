@@ -81,7 +81,7 @@ export default function ProfilePage() {
 
         // Validate image type
         if (!file.type.startsWith('image/')) {
-            setMessage({ type: 'error', text: 'المجلد يجب أن يكون صورة' });
+            setMessage({ type: 'error', text: 'الملف يجب أن يكون صورة' });
             return;
         }
 
@@ -89,24 +89,24 @@ export default function ProfilePage() {
         setMessage({ type: '', text: '' });
 
         try {
-            const { supabase } = await import('@/lib/supabase');
+            const { getCloudinaryUploadUrl, cloudinaryConfig } = await import('@/lib/cloudinary');
 
-            // Generate unique filename
-            const timestamp = Date.now();
-            const extension = file.name.split('.').pop();
-            const filename = `doctor-${session?.user.doctorId}-${timestamp}.${extension}`;
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', cloudinaryConfig.uploadPreset);
 
-            // Upload directly to Supabase
-            const { data: uploadData, error: uploadError } = await supabase.storage
-                .from('doctor-profiles')
-                .upload(filename, file, { upsert: true });
+            const uploadRes = await fetch(getCloudinaryUploadUrl(), {
+                method: 'POST',
+                body: formData,
+            });
 
-            if (uploadError) throw uploadError;
+            const uploadData = await uploadRes.json();
 
-            // Get public URL
-            const { data: { publicUrl } } = supabase.storage
-                .from('doctor-profiles')
-                .getPublicUrl(filename);
+            if (!uploadRes.ok) {
+                throw new Error(uploadData.error?.message || 'فشل تحميل الصورة إلى Cloudinary');
+            }
+
+            const publicUrl = uploadData.secure_url;
 
             // Notify API
             const res = await fetch('/api/upload', {
