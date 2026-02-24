@@ -1476,6 +1476,53 @@ a:hover {
   }
 }
 
+.patient-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: var(--spacing-xl);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .patient-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* RIP Display Styles */
+.rip-box {
+  background: var(--bg-primary);
+  border: 2px dashed var(--primary);
+  padding: var(--spacing-lg);
+  border-radius: var(--border-radius);
+  text-align: center;
+  margin: var(--spacing-lg) 0;
+  position: relative;
+}
+
+.rip-number {
+  font-family: monospace;
+  font-size: var(--font-size-xl);
+  color: var(--primary);
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: var(--spacing-md);
+  word-break: break-all;
+}
+
+.copy-success-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: var(--success);
+  color: white;
+  padding: 4px 10px;
+  border-radius: var(--border-radius-full);
+  font-size: var(--font-size-xs);
+  animation: slideInUp 0.3s ease;
+}
+
 /* Tablet adjustments */
 @media (min-width: 769px) and (max-width: 1024px) {
   .sidebar {

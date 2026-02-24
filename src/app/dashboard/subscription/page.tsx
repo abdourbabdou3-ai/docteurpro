@@ -90,6 +90,29 @@ export default function SubscriptionPage() {
         }
     };
 
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
+    const [copySuccess, setCopySuccess] = useState(false);
+
+    const RIP_NUMBER = '00799999004392300565';
+
+    const handlePlanSelect = (plan: Plan) => {
+        setSelectedPlan(plan);
+        setShowPaymentModal(true);
+    };
+
+    const copyRip = () => {
+        navigator.clipboard.writeText(RIP_NUMBER);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
+    };
+
+    const confirmPaymentAndRequest = async () => {
+        if (!selectedPlan) return;
+        await requestSubscription(selectedPlan.id);
+        setShowPaymentModal(false);
+    };
+
     if (loading) {
         return (
             <div className="flex-center" style={{ padding: 'var(--spacing-3xl)' }}>
@@ -99,7 +122,7 @@ export default function SubscriptionPage() {
     }
 
     return (
-        <>
+        <div className="subscription-page">
             <div className="mb-xl">
                 <h1 style={{ marginBottom: 'var(--spacing-xs)' }}>الاشتراك</h1>
                 <p className="text-muted">إدارة باقة اشتراكك</p>
@@ -258,7 +281,7 @@ export default function SubscriptionPage() {
                             ) : (
                                 <button
                                     className="btn btn-primary btn-block"
-                                    onClick={() => requestSubscription(plan.id)}
+                                    onClick={() => handlePlanSelect(plan)}
                                     disabled={requesting}
                                 >
                                     {requesting ? 'جاري الطلب...' : 'اشترك الآن'}
@@ -268,6 +291,59 @@ export default function SubscriptionPage() {
                     </div>
                 ))}
             </div>
-        </>
+
+            {/* Payment Modal */}
+            {showPaymentModal && selectedPlan && (
+                <div className="modal-overlay" onClick={() => setShowPaymentModal(false)}>
+                    <div className="modal modal-md" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">تأكيد الاشتراك - {selectedPlan.nameAr}</h3>
+                            <button className="modal-close" onClick={() => setShowPaymentModal(false)}>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M18 6L6 18M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div className="modal-body text-center">
+                            <div className="mb-lg">
+                                <p className="text-muted">يرجى تحويل مبلغ الاشتراك إلى الحساب البريدي التالي:</p>
+                                <div className="rip-box">
+                                    <span className="rip-number">{RIP_NUMBER}</span>
+                                    {copySuccess && <span className="copy-success-badge">تم النسخ!</span>}
+                                    <button className="btn btn-outline btn-sm btn-block" onClick={copyRip}>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginLeft: 'var(--spacing-sm)' }}>
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                                        </svg>
+                                        نسخ رقم الحساب (RIP)
+                                    </button>
+                                </div>
+                                <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--danger)', fontWeight: '600' }}>
+                                    المبلغ المطلوب: {formatCurrency(selectedPlan.price)}
+                                </p>
+                            </div>
+
+                            <div className="alert alert-info">
+                                <p style={{ margin: 0, fontSize: 'var(--font-size-sm)' }}>
+                                    عند الضغط على "تم التحويل"، سيتم إرسال طلب اشتراكك للمدير للمراجعة والتفعيل.
+                                </p>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                className="btn btn-primary btn-block"
+                                onClick={confirmPaymentAndRequest}
+                                disabled={requesting}
+                            >
+                                {requesting ? 'جاري إرسال الطلب...' : 'تم التحويل، أرسل الطلب للمدير'}
+                            </button>
+                            <button className="btn btn-ghost btn-block" onClick={() => setShowPaymentModal(false)}>
+                                إلغاء
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

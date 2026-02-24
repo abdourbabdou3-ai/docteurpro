@@ -186,7 +186,7 @@ export default function PatientDetailPage() {
                 </div>
             </div>
 
-            <div className="grid" style={{ gridTemplateColumns: '1fr 350px', gap: 'var(--spacing-xl)', alignItems: 'start' }}>
+            <div className="patient-details-grid">
                 {/* Main Content */}
                 <div>
                     {/* Appointments History */}
