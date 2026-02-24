@@ -124,8 +124,8 @@ export default function AppointmentsPage() {
             </div>
 
             {/* Filters */}
-            <div className="card mb-lg" style={{ padding: 'var(--spacing-md)' }}>
-                <div className="flex gap-sm flex-wrap">
+            <div className="card mb-lg" style={{ padding: 'var(--spacing-md)', overflowX: 'auto' }}>
+                <div className="flex gap-sm" style={{ flexWrap: 'nowrap', minWidth: 'max-content' }}>
                     {[
                         { value: 'all', label: 'الكل' },
                         { value: 'PENDING', label: 'بانتظار التأكيد' },
@@ -168,9 +168,9 @@ export default function AppointmentsPage() {
                             {filteredAppointments.map((apt) => (
                                 <tr key={apt.id}>
                                     <td data-label="المريض">
-                                        <strong>{apt.patient.name}</strong>
+                                        <strong>{apt.patient?.name || 'غير معروف'}</strong>
                                     </td>
-                                    <td data-label="رقم الهاتف">{apt.patient.phone}</td>
+                                    <td data-label="رقم الهاتف">{apt.patient?.phone || '-'}</td>
                                     <td data-label="التاريخ">{formatDateAr(apt.date)}</td>
                                     <td data-label="الوقت">{formatTimeAr(apt.time)}</td>
                                     <td data-label="الحالة">

@@ -97,13 +97,13 @@ export default function PatientsPage() {
                             {patients.map((patient) => (
                                 <tr key={patient.id}>
                                     <td data-label="اسم المريض">
-                                        <strong>{patient.name}</strong>
+                                        <strong>{patient?.name || 'غير معروف'}</strong>
                                     </td>
-                                    <td data-label="رقم الهاتف">{patient.phone}</td>
-                                    <td data-label="الإيميل">{patient.email || '-'}</td>
-                                    <td data-label="عدد الزيارات">{patient.appointmentCount}</td>
+                                    <td data-label="رقم الهاتف">{patient?.phone || '-'}</td>
+                                    <td data-label="الإيميل">{patient?.email || '-'}</td>
+                                    <td data-label="عدد الزيارات">{patient?.appointmentCount || 0}</td>
                                     <td data-label="آخر زيارة">
-                                        {patient.lastAppointment ? formatDateAr(patient.lastAppointment.date) : '-'}
+                                        {patient?.lastAppointment?.date ? formatDateAr(patient.lastAppointment.date) : '-'}
                                     </td>
                                     <td data-label="الإجراءات">
                                         <Link href={`/dashboard/patients/${patient.id}`} className="btn btn-sm btn-outline">
