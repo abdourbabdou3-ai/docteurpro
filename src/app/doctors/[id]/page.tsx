@@ -38,7 +38,7 @@ function Navbar() {
                         <circle cx="20" cy="20" r="18" fill="#0066cc" />
                         <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
                     </svg>
-                    دكتور
+                    tabib-dz
                 </Link>
 
                 <ul className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
@@ -54,6 +54,7 @@ function Navbar() {
                 </ul>
 
                 <div className="navbar-actions hidden-mobile">
+                    {/* Placeholder for install button functionality if needed in this component */}
                     <Link href="/doctors" className="btn btn-ghost">رجوع للأطباء</Link>
                     <Link href="/login" className="btn btn-ghost">دخول</Link>
                 </div>
@@ -641,7 +642,7 @@ export default function DoctorProfilePage() {
             <footer className="footer">
                 <div className="container">
                     <div className="footer-bottom" style={{ border: 'none', paddingTop: 0 }}>
-                        <p>© 2024 دكتور. جميع الحقوق محفوظة</p>
+                        <p>© 2024 tabib-dz. جميع الحقوق محفوظة</p>
                     </div>
                 </div>
             </footer>

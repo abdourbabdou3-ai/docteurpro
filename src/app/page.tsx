@@ -20,6 +20,32 @@ export default function HomePage() {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [showInstallBtn, setShowInstallBtn] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setShowInstallBtn(true);
+        });
+
+        window.addEventListener('appinstalled', () => {
+            setShowInstallBtn(false);
+            setDeferredPrompt(null);
+        });
+    }, []);
+
+    const handleInstallClick = async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            setShowInstallBtn(false);
+        }
+        setDeferredPrompt(null);
+    };
+
     useEffect(() => {
         fetch('/api/doctors?limit=6')
             .then((res) => res.json())
@@ -42,7 +68,7 @@ export default function HomePage() {
                             <circle cx="20" cy="20" r="18" fill="#0066cc" />
                             <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
                         </svg>
-                        دكتور
+                        tabib-dz
                     </Link>
 
                     <ul className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
@@ -59,6 +85,18 @@ export default function HomePage() {
                     </ul>
 
                     <div className="navbar-actions hidden-mobile">
+                        {showInstallBtn && (
+                            <button
+                                onClick={handleInstallClick}
+                                className="btn btn-outline"
+                                style={{ gap: 'var(--spacing-xs)', borderColor: 'var(--primary)', color: 'var(--primary)' }}
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                                </svg>
+                                تثبيت التطبيق
+                            </button>
+                        )}
                         <Link href="/login" className="btn btn-ghost">تسجيل الدخول</Link>
                         <Link href="/register" className="btn btn-primary">انضم كطبيب</Link>
                     </div>
@@ -103,7 +141,7 @@ export default function HomePage() {
             {/* Features Section */}
             <section style={{ padding: 'var(--spacing-3xl) 0', background: 'var(--white)' }}>
                 <div className="container">
-                    <h2 className="text-center mb-xl">لماذا تختار منصة دكتور؟</h2>
+                    <h2 className="text-center mb-xl">لماذا تختار منصة tabib-dz؟</h2>
 
                     <div className="grid grid-3">
                         <div className="card" style={{ textAlign: 'center', padding: 'var(--spacing-xl)' }}>
@@ -354,7 +392,7 @@ export default function HomePage() {
                 <div className="container">
                     <div className="footer-grid">
                         <div>
-                            <div className="footer-brand">دكتور</div>
+                            <div className="footer-brand">tabib-dz</div>
                             <p style={{ color: 'var(--gray-400)', marginBottom: 'var(--spacing-md)' }}>
                                 منصة رقمية متكاملة لحجز المواعيد الطبية في الجزائر
                             </p>
@@ -409,7 +447,7 @@ export default function HomePage() {
                     </div>
 
                     <div className="footer-bottom">
-                        <p>© 2024 دكتور. جميع الحقوق محفوظة</p>
+                        <p>© 2024 tabib-dz. جميع الحقوق محفوظة</p>
                     </div>
                 </div>
             </footer>

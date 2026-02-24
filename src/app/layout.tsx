@@ -11,12 +11,12 @@ const tajawal = Tajawal({
 });
 
 export const metadata: Metadata = {
-    title: 'دكتور - منصة حجز المواعيد الطبية',
+    title: 'tabib-dz - منصة حجز المواعيد الطبية',
     description: 'منصة رقمية تربط الأطباء بالمرضى في الجزائر. احجز موعدك الآن بسهولة وسرعة',
     keywords: 'طبيب, حجز مواعيد, الجزائر, عيادة, صحة, doctor, booking, Algeria',
     authors: [{ name: 'Docteur Platform' }],
     openGraph: {
-        title: 'دكتور - منصة حجز المواعيد الطبية',
+        title: 'tabib-dz - منصة حجز المواعيد الطبية',
         description: 'منصة رقمية تربط الأطباء بالمرضى في الجزائر',
         type: 'website',
         locale: 'ar_DZ',

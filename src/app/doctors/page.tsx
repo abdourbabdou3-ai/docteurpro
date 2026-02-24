@@ -78,6 +78,32 @@ export default function DoctorsPage() {
         }
     }, [filters]);
 
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [showInstallBtn, setShowInstallBtn] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setShowInstallBtn(true);
+        });
+
+        window.addEventListener('appinstalled', () => {
+            setShowInstallBtn(false);
+            setDeferredPrompt(null);
+        });
+    }, []);
+
+    const handleInstallClick = async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            setShowInstallBtn(false);
+        }
+        setDeferredPrompt(null);
+    };
+
     useEffect(() => {
         fetchDoctors();
     }, [fetchDoctors]);
@@ -92,7 +118,7 @@ export default function DoctorsPage() {
                             <circle cx="20" cy="20" r="18" fill="#0066cc" />
                             <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
                         </svg>
-                        دكتور
+                        tabib-dz
                     </Link>
 
                     <ul className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
@@ -108,6 +134,18 @@ export default function DoctorsPage() {
                     </ul>
 
                     <div className="navbar-actions hidden-mobile">
+                        {showInstallBtn && (
+                            <button
+                                onClick={handleInstallClick}
+                                className="btn btn-outline"
+                                style={{ gap: 'var(--spacing-xs)', borderColor: 'var(--primary)', color: 'var(--primary)' }}
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                                </svg>
+                                تثبيت التطبيق
+                            </button>
+                        )}
                         <Link href="/login" className="btn btn-ghost">تسجيل الدخول</Link>
                         <Link href="/register" className="btn btn-primary">انضم كطبيب</Link>
                     </div>
@@ -326,7 +364,7 @@ export default function DoctorsPage() {
             <footer className="footer" >
                 <div className="container">
                     <div className="footer-bottom" style={{ border: 'none', paddingTop: 0 }}>
-                        <p>© 2024 دكتور. جميع الحقوق محفوظة</p>
+                        <p>© 2024 tabib-dz. جميع الحقوق محفوظة</p>
                     </div>
                 </div>
             </footer >

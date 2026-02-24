@@ -11,9 +11,9 @@ export default function AboutPage() {
               <circle cx="20" cy="20" r="18" fill="#0066cc" />
               <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
             </svg>
-            دكتور
+            tabib-dz
           </Link>
-          
+
           <ul className="navbar-menu">
             <li><Link href="/" className="navbar-link">الرئيسية</Link></li>
             <li><Link href="/doctors" className="navbar-link">الأطباء</Link></li>
@@ -29,14 +29,14 @@ export default function AboutPage() {
       </nav>
 
       {/* Hero */}
-      <section style={{ 
+      <section style={{
         background: 'linear-gradient(135deg, var(--bg-primary) 0%, var(--white) 100%)',
         padding: 'var(--spacing-3xl) 0'
       }}>
         <div className="container text-center">
           <h1 style={{ marginBottom: 'var(--spacing-md)' }}>من نحن</h1>
           <p className="text-muted" style={{ maxWidth: '600px', margin: '0 auto' }}>
-            منصة دكتور هي الحل الرقمي الأول في الجزائر لربط الأطباء بالمرضى
+            منصة tabib-dz هي الحل الرقمي الأول في الجزائر لربط الأطباء بالمرضى
           </p>
         </div>
       </section>
@@ -79,7 +79,7 @@ export default function AboutPage() {
       <section style={{ padding: 'var(--spacing-3xl) 0', background: 'var(--white)' }}>
         <div className="container">
           <h2 className="text-center" style={{ marginBottom: 'var(--spacing-xl)' }}>قيمنا</h2>
-          
+
           <div className="grid grid-3">
             <div className="card text-center" style={{ padding: 'var(--spacing-xl)' }}>
               <div style={{
@@ -151,7 +151,7 @@ export default function AboutPage() {
       <footer className="footer">
         <div className="container">
           <div className="footer-bottom" style={{ border: 'none', paddingTop: 0 }}>
-            <p>© 2024 دكتور. جميع الحقوق محفوظة</p>
+            <p>© 2024 tabib-dz. جميع الحقوق محفوظة</p>
           </div>
         </div>
       </footer>

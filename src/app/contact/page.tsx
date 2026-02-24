@@ -32,7 +32,7 @@ export default function ContactPage() {
                             <circle cx="20" cy="20" r="18" fill="#0066cc" />
                             <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
                         </svg>
-                        دكتور
+                        tabib-dz
                     </Link>
 
                     <ul className="navbar-menu">
@@ -268,7 +268,7 @@ export default function ContactPage() {
                 <div className="container">
                     <div className="footer-grid">
                         <div>
-                            <div className="footer-brand">دكتور</div>
+                            <div className="footer-brand">tabib-dz</div>
                             <p style={{ color: 'var(--gray-400)', marginBottom: 'var(--spacing-md)' }}>
                                 منصة رقمية متكاملة لحجز المواعيد الطبية في الجزائر
                             </p>
@@ -314,7 +314,7 @@ export default function ContactPage() {
                     </div>
 
                     <div className="footer-bottom">
-                        <p>© 2024 دكتور. جميع الحقوق محفوظة</p>
+                        <p>© 2024 tabib-dz. جميع الحقوق محفوظة</p>
                     </div>
                 </div>
             </footer>
