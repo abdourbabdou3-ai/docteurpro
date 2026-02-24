@@ -85,7 +85,7 @@ export default function DashboardPage() {
                         zIndex: 0
                     }}></div>
 
-                    <div className="flex-between align-center" style={{ position: 'relative', zIndex: 1 }}>
+                    <div className="flex-between align-center mobile-column gap-lg" style={{ position: 'relative', zIndex: 1 }}>
                         <div className="flex flex-column gap-sm" style={{ flex: 1 }}>
                             <div className="flex align-center gap-sm">
                                 <span className={`badge ${(stats as any).subscription.planName.includes('احترافي') ? 'badge-primary' : 'badge-success'}`}>
@@ -142,7 +142,7 @@ export default function DashboardPage() {
             )}
 
             {/* Earnings Cards */}
-            <div className="grid grid-3 mb-xl">
+            <div className="grid grid-2 mb-xl">
                 <div className="card" style={{
                     background: 'linear-gradient(135deg, #10b981, #059669)',
                     color: 'white',
@@ -334,7 +334,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-3 mt-xl">
+            <div className="grid grid-2 mt-xl">
                 <Link href="/dashboard/appointments" className="card" style={{ padding: 'var(--spacing-xl)', textAlign: 'center', textDecoration: 'none' }}>
                     <div style={{
                         width: '60px',

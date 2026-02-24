@@ -159,7 +159,7 @@ export default function ReportsPage() {
                         <hr style={{ border: 'none', borderTop: '1px solid var(--gray-200)', marginTop: 'var(--spacing-sm)' }} />
                     </div>
                     {/* Summary Cards */}
-                    <div className="grid grid-3 mb-xl">
+                    <div className="grid grid-2 mb-xl">
                         <div className="card" style={{ background: 'linear-gradient(135deg, #10b981, #059669)', color: 'white', padding: 'var(--spacing-lg)' }}>
                             <div style={{ fontSize: 'var(--font-size-sm)', opacity: 0.9, marginBottom: 'var(--spacing-xs)' }}>
                                 إجمالي الأرباح
@@ -189,7 +189,7 @@ export default function ReportsPage() {
                     </div>
 
                     {/* Stats Breakdown */}
-                    <div className="grid mb-xl" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: 'var(--spacing-md)' }}>
+                    <div className="stats-grid mb-xl">
                         <div className="card text-center" style={{ padding: 'var(--spacing-md)' }}>
                             <div className="text-secondary" style={{ fontSize: 'var(--font-size-xl)', fontWeight: '800' }}>
                                 {data.confirmedAppointments}

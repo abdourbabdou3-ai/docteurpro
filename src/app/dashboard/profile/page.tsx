@@ -203,7 +203,7 @@ export default function ProfilePage() {
             )}
 
             <form onSubmit={handleSubmit}>
-                <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-xl)' }}>
+                <div className="grid grid-2" style={{ gap: 'var(--spacing-xl)' }}>
                     {/* Basic Info & Image */}
                     <div>
                         <div className="card mb-lg">

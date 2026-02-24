@@ -1297,31 +1297,53 @@ a:hover {
   .table td {
     border: none;
     position: relative;
-    padding-right: 50% !important;
-    text-align: left !important;
+    padding-right: 45% !important;
+    text-align: right !important;
     white-space: normal;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--gray-50);
+  }
+
+  .table td:last-child {
+    border-bottom: none;
   }
 
   .table td:before {
     position: absolute;
-    right: var(--spacing-md);
-    width: 45%;
-    padding-right: 10px;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40%;
+    padding-right: var(--spacing-sm);
     white-space: nowrap;
     content: attr(data-label);
     font-weight: 700;
-    color: var(--gray-700);
+    color: var(--gray-500);
     text-align: right;
+    font-size: var(--font-size-xs);
   }
 
   /* Mobile Cards */
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr !important;
+    gap: var(--spacing-md) !important;
+  }
+
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-sm);
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: var(--spacing-sm) !important;
+  }
+
+  .mobile-column {
+    flex-direction: column !important;
+    align-items: stretch !important;
   }
 
   .stat-card {
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm);
   }
 
   .stat-card-value {
