@@ -1,8 +1,10 @@
-const CACHE_NAME = 'tabib-dz-cache-v13';
+const CACHE_NAME = 'tabib-dz-cache-v15';
 const urlsToCache = [
     '/',
     '/dashboard',
-    '/manifest.json?v=13'
+    '/manifest.json?v=15',
+    '/icons/icon-192.png',
+    '/icons/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
