@@ -325,7 +325,7 @@ export default function SubscriptionPage() {
 
                             <div className="alert alert-info">
                                 <p style={{ margin: 0, fontSize: 'var(--font-size-sm)' }}>
-                                    عند الضغط على "تم التحويل"، سيتم إرسال طلب اشتراكك للمدير للمراجعة والتفعيل.
+                                    عند الضغط على &quot;تم التحويل&quot;، سيتم إرسال طلب اشتراكك للمدير للمراجعة والتفعيل.
                                 </p>
                             </div>
                         </div>
