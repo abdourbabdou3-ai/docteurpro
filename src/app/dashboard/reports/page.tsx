@@ -36,6 +36,7 @@ export default function ReportsPage() {
             const [year, monthNum] = month.split('-').map(Number);
             const startDate = new Date(year, monthNum - 1, 1);
             const endDate = new Date(year, monthNum, 0);
+            endDate.setHours(23, 59, 59, 999);
 
             const res = await fetch(
                 `/api/appointments?startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}&limit=1000`

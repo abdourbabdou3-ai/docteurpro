@@ -152,23 +152,6 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Check if time slot is available
-        const existingAppointment = await prisma.appointment.findFirst({
-            where: {
-                doctorId,
-                date: new Date(date),
-                time,
-                status: { in: ['PENDING', 'CONFIRMED'] },
-            },
-        });
-
-        if (existingAppointment) {
-            return NextResponse.json(
-                { success: false, error: 'هذا الموعد محجوز مسبقاً. يرجى اختيار وقت آخر' },
-                { status: 400 }
-            );
-        }
-
         // Create or get patient
         let patient = await prisma.patient.findFirst({
             where: { phone: patientPhone },
