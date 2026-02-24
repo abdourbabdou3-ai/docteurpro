@@ -267,6 +267,14 @@ export default function ReportsPage() {
                             </table>
                         </div>
                     </div>
+                    {/* Empty State */}
+                    {data.appointments.length === 0 && (
+                        <div className="text-center" style={{ padding: 'var(--spacing-3xl)', background: 'var(--gray-50)', borderRadius: 'var(--border-radius)', marginBottom: 'var(--spacing-lg)' }}>
+                            <p className="text-muted" style={{ fontSize: 'var(--font-size-lg)' }}>
+                                لا توجد مواعيد مسجلة لشهر {data.period}
+                            </p>
+                        </div>
+                    )}
                 </div>
             )}
         </>

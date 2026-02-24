@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
                 where: { doctorId, date: { gte: today, lt: tomorrow } },
             }),
             prisma.appointment.count({
-                where: { doctorId, createdAt: { gte: monthStart } },
+                where: { doctorId, date: { gte: monthStart } },
             }),
             prisma.appointment.count({
                 where: { doctorId, status: 'PENDING' },
