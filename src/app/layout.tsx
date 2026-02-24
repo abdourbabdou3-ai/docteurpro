@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: 'tabib-dz - منصة حجز المواعيد الطبية',
     description: 'منصة رقمية تربط الأطباء بالمرضى في الجزائر. احجز موعدك الآن بسهولة وسرعة',
     keywords: 'طبيب, حجز مواعيد, الجزائر, عيادة, صحة, doctor, booking, Algeria',
-    authors: [{ name: 'Docteur Platform' }],
+    authors: [{ name: 'tabib-dz Platform' }],
     openGraph: {
         title: 'tabib-dz - منصة حجز المواعيد الطبية',
         description: 'منصة رقمية تربط الأطباء بالمرضى في الجزائر',
