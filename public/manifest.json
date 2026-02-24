@@ -10,15 +10,9 @@
     "lang": "ar",
     "icons": [
         {
-            "src": "/icons/icon-192x192.png",
-            "sizes": "192x192 798x796",
-            "type": "image/png",
-            "purpose": "any"
-        },
-        {
-            "src": "/icons/icon-512x512.png",
-            "sizes": "512x512 798x796",
-            "type": "image/png",
+            "src": "/icons/medical-logo-square.jpg",
+            "sizes": "640x640",
+            "type": "image/jpeg",
             "purpose": "any"
         }
     ]

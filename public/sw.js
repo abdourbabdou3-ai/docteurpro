@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tabib-dz-cache-v6';
+const CACHE_NAME = 'tabib-dz-cache-v7';
 const urlsToCache = [
     '/',
     '/dashboard',
