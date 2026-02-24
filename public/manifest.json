@@ -6,14 +6,14 @@
     "theme_color": "#0066cc",
     "display": "standalone",
     "scope": "/",
-    "start_url": "/?v=12",
+    "start_url": "/?v=13",
     "dir": "rtl",
     "lang": "ar",
     "icons": [
         {
-            "src": "/icons/icon-doctor-v12.jpg",
-            "sizes": "192x192 512x512 640x640",
-            "type": "image/jpeg",
+            "src": "/icons/icon-doctor-v13.png",
+            "sizes": "192x192 512x512 798x796",
+            "type": "image/png",
             "purpose": "any"
         }
     ]
