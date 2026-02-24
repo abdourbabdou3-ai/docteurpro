@@ -7,6 +7,7 @@ interface ReportData {
     period: string;
     totalAppointments: number;
     completedAppointments: number;
+    confirmedAppointments: number;
     cancelledAppointments: number;
     pendingAppointments: number;
     totalEarnings: number;
@@ -46,6 +47,7 @@ export default function ReportsPage() {
             if (result.success) {
                 const appointments = result.data.appointments;
                 const completed = appointments.filter((a: any) => a.status === 'COMPLETED');
+                const confirmed = appointments.filter((a: any) => a.status === 'CONFIRMED');
                 const cancelled = appointments.filter((a: any) => a.status === 'CANCELLED');
                 const pending = appointments.filter((a: any) => a.status === 'PENDING');
                 const earnings = completed.reduce((sum: number, a: any) => sum + (Number(a.actualPrice) || 0), 0);
@@ -54,6 +56,7 @@ export default function ReportsPage() {
                     period: new Date(year, monthNum - 1).toLocaleDateString('ar-DZ', { month: 'long', year: 'numeric' }),
                     totalAppointments: appointments.length,
                     completedAppointments: completed.length,
+                    confirmedAppointments: confirmed.length,
                     cancelledAppointments: cancelled.length,
                     pendingAppointments: pending.length,
                     totalEarnings: earnings,
@@ -186,30 +189,36 @@ export default function ReportsPage() {
                     </div>
 
                     {/* Stats Breakdown */}
-                    <div className="grid grid-4 mb-xl">
-                        <div className="card text-center" style={{ padding: 'var(--spacing-lg)' }}>
-                            <div className="text-success" style={{ fontSize: 'var(--font-size-2xl)', fontWeight: '800' }}>
-                                {data.completedAppointments}
+                    <div className="grid mb-xl" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: 'var(--spacing-md)' }}>
+                        <div className="card text-center" style={{ padding: 'var(--spacing-md)' }}>
+                            <div className="text-secondary" style={{ fontSize: 'var(--font-size-xl)', fontWeight: '800' }}>
+                                {data.confirmedAppointments}
                             </div>
-                            <div className="text-muted">مكتمل</div>
+                            <div className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>مؤكد</div>
                         </div>
-                        <div className="card text-center" style={{ padding: 'var(--spacing-lg)' }}>
-                            <div className="text-warning" style={{ fontSize: 'var(--font-size-2xl)', fontWeight: '800' }}>
+                        <div className="card text-center" style={{ padding: 'var(--spacing-md)' }}>
+                            <div className="text-warning" style={{ fontSize: 'var(--font-size-xl)', fontWeight: '800' }}>
                                 {data.pendingAppointments}
                             </div>
-                            <div className="text-muted">قيد الانتظار</div>
+                            <div className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>قيد الانتظار</div>
                         </div>
-                        <div className="card text-center" style={{ padding: 'var(--spacing-lg)' }}>
-                            <div className="text-danger" style={{ fontSize: 'var(--font-size-2xl)', fontWeight: '800' }}>
+                        <div className="card text-center" style={{ padding: 'var(--spacing-md)' }}>
+                            <div className="text-danger" style={{ fontSize: 'var(--font-size-xl)', fontWeight: '800' }}>
                                 {data.cancelledAppointments}
                             </div>
-                            <div className="text-muted">ملغي</div>
+                            <div className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>ملغي</div>
                         </div>
-                        <div className="card text-center" style={{ padding: 'var(--spacing-lg)' }}>
-                            <div className="text-primary" style={{ fontSize: 'var(--font-size-2xl)', fontWeight: '800' }}>
+                        <div className="card text-center" style={{ padding: 'var(--spacing-md)' }}>
+                            <div className="text-success" style={{ fontSize: 'var(--font-size-xl)', fontWeight: '800' }}>
+                                {data.completedAppointments}
+                            </div>
+                            <div className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>مكتمل</div>
+                        </div>
+                        <div className="card text-center" style={{ padding: 'var(--spacing-md)' }}>
+                            <div className="text-primary" style={{ fontSize: 'var(--font-size-xl)', fontWeight: '800' }}>
                                 {data.completedAppointments > 0 ? formatCurrency(data.totalEarnings / data.completedAppointments) : '0'}
                             </div>
-                            <div className="text-muted">متوسط السعر</div>
+                            <div className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>متوسط السعر</div>
                         </div>
                     </div>
 
