@@ -1,8 +1,8 @@
-const CACHE_NAME = 'tabib-dz-cache-v10';
+const CACHE_NAME = 'tabib-dz-cache-v11';
 const urlsToCache = [
     '/',
     '/dashboard',
-    '/manifest.json?v=10'
+    '/manifest.json?v=11'
 ];
 
 self.addEventListener('install', (event) => {
