@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export default function DashboardLayout({
@@ -14,6 +14,22 @@ export default function DashboardLayout({
     const pathname = usePathname();
     const router = useRouter();
     const { data: session, status } = useSession();
+
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [showInstallBtn, setShowInstallBtn] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setShowInstallBtn(true);
+        });
+
+        window.addEventListener('appinstalled', () => {
+            setShowInstallBtn(false);
+            setDeferredPrompt(null);
+        });
+    }, []);
 
     useEffect(() => {
         if (status === 'unauthenticated') {
@@ -62,21 +78,6 @@ export default function DashboardLayout({
         { href: '/dashboard/subscription', label: 'الاشتراك', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
     ];
 
-    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-    const [showInstallBtn, setShowInstallBtn] = useState(false);
-
-    useEffect(() => {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            setDeferredPrompt(e);
-            setShowInstallBtn(true);
-        });
-
-        window.addEventListener('appinstalled', () => {
-            setShowInstallBtn(false);
-            setDeferredPrompt(null);
-        });
-    }, []);
 
     const handleInstallClick = async () => {
         if (!deferredPrompt) return;
