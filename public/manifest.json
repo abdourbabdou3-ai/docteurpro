@@ -2,17 +2,22 @@
     "name": "tabib-dz - منصة المواعيد",
     "short_name": "tabib-dz",
     "description": "منصة رقمية تربط الأطباء بالمرضى في الجزائر",
-    "start_url": "/",
-    "display": "standalone",
     "background_color": "#ffffff",
     "theme_color": "#0066cc",
-    "dir": "rtl",
-    "lang": "ar",
+    "display": "standalone",
+    "scope": "/",
+    "start_url": "/",
     "icons": [
         {
-            "src": "/icons/medical-logo-square.jpg",
-            "sizes": "640x640",
-            "type": "image/jpeg",
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192 640x640",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512 640x640",
+            "type": "image/png",
             "purpose": "any"
         }
     ]
