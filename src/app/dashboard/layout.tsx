@@ -62,6 +62,32 @@ export default function DashboardLayout({
         { href: '/dashboard/subscription', label: 'الاشتراك', icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
     ];
 
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [showInstallBtn, setShowInstallBtn] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+            setShowInstallBtn(true);
+        });
+
+        window.addEventListener('appinstalled', () => {
+            setShowInstallBtn(false);
+            setDeferredPrompt(null);
+        });
+    }, []);
+
+    const handleInstallClick = async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            setShowInstallBtn(false);
+        }
+        setDeferredPrompt(null);
+    };
+
     return (
         <div className="dashboard">
             <aside className="sidebar">
@@ -70,7 +96,7 @@ export default function DashboardLayout({
                         <circle cx="20" cy="20" r="18" fill="#0066cc" />
                         <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
                     </svg>
-                    دكتور
+                    tabib-dz
                 </Link>
 
                 <nav>
@@ -92,6 +118,18 @@ export default function DashboardLayout({
                 </nav>
 
                 <div style={{ marginTop: 'auto', paddingTop: 'var(--spacing-xl)', borderTop: '1px solid var(--gray-200)' }}>
+                    {showInstallBtn && (
+                        <button
+                            onClick={handleInstallClick}
+                            className="btn btn-primary btn-block mb-md"
+                            style={{ gap: 'var(--spacing-sm)' }}
+                        >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                            </svg>
+                            تثبيت التطبيق
+                        </button>
+                    )}
                     <div style={{ marginBottom: 'var(--spacing-md)' }}>
                         <p style={{ fontWeight: '600', marginBottom: 'var(--spacing-xs)' }}>
                             {session?.user?.doctorName || session?.user?.email || 'طبيب'}
@@ -156,15 +194,28 @@ export default function DashboardLayout({
                     </svg>
                     <span>المرضى</span>
                 </Link>
-                <Link
-                    href="/dashboard/subscription"
-                    className={`bottom-nav-link ${pathname === '/dashboard/subscription' ? 'active' : ''}`}
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                    </svg>
-                    <span>الاشتراك</span>
-                </Link>
+                {showInstallBtn ? (
+                    <button
+                        onClick={handleInstallClick}
+                        className="bottom-nav-link"
+                        style={{ border: 'none', background: 'none' }}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                        </svg>
+                        <span>تثبيت</span>
+                    </button>
+                ) : (
+                    <Link
+                        href="/dashboard/subscription"
+                        className={`bottom-nav-link ${pathname === '/dashboard/subscription' ? 'active' : ''}`}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                        </svg>
+                        <span>الاشتراك</span>
+                    </Link>
+                )}
                 <Link
                     href="/dashboard/profile"
                     className={`bottom-nav-link ${pathname === '/dashboard/profile' ? 'active' : ''}`}

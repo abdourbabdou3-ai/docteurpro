@@ -30,6 +30,25 @@ export default function RootLayout({
 }) {
     return (
         <html lang="ar" dir="rtl" className={tajawal.variable}>
+            <head>
+                <link rel="manifest" href="/manifest.json" />
+                <meta name="theme-color" content="#0066cc" />
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+                <meta name="apple-mobile-web-app-title" content="tabib-dz" />
+                <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            if ('serviceWorker' in navigator) {
+                                window.addEventListener('load', function() {
+                                    navigator.serviceWorker.register('/sw.js');
+                                });
+                            }
+                        `,
+                    }}
+                />
+            </head>
             <body style={{ fontFamily: 'var(--font-tajawal), Tajawal, sans-serif' }}>
                 <Providers>{children}</Providers>
             </body>
