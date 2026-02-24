@@ -1,4 +1,4 @@
-const CACHE_NAME = 'docteur-cache-v1';
+const CACHE_NAME = 'tabib-dz-cache-v3';
 const urlsToCache = [
     '/',
     '/dashboard',
