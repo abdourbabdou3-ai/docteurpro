@@ -24,6 +24,7 @@ interface ReportData {
 
 export default function ReportsPage() {
     const [loading, setLoading] = useState(true);
+    const [mounted, setMounted] = useState(false);
     const [generating, setGenerating] = useState(false);
     const [data, setData] = useState<ReportData | null>(null);
     const [month, setMonth] = useState(() => {
@@ -74,6 +75,10 @@ export default function ReportsPage() {
     }, [month]);
 
     useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
         fetchReportData();
     }, [fetchReportData]);
 
@@ -119,9 +124,9 @@ export default function ReportsPage() {
         }
     };
 
-    if (loading) {
+    if (!mounted || loading) {
         return (
-            <div className="flex-center" style={{ padding: 'var(--spacing-3xl)' }}>
+            <div className="flex-center" style={{ height: '60vh' }}>
                 <div className="spinner"></div>
             </div>
         );

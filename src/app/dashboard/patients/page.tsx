@@ -19,21 +19,27 @@ export default function PatientsPage() {
     const [patients, setPatients] = useState<Patient[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [mounted, setMounted] = useState(false);
 
     const fetchPatients = useCallback(async () => {
         try {
             const params = search ? `?search=${encodeURIComponent(search)}` : '';
             const res = await fetch(`/api/patients${params}`);
+            if (!res.ok) throw new Error('Failed to fetch data');
             const data = await res.json();
             if (data.success && data.data?.patients) {
                 setPatients(data.data.patients);
             }
         } catch (error) {
-            console.error(error);
+            console.error('Fetch Error:', error);
         } finally {
             setLoading(false);
         }
     }, [search]);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         fetchPatients();
@@ -46,9 +52,9 @@ export default function PatientsPage() {
         return () => clearTimeout(timer);
     }, [search, fetchPatients]);
 
-    if (loading) {
+    if (!mounted || loading) {
         return (
-            <div className="flex-center" style={{ padding: 'var(--spacing-3xl)' }}>
+            <div className="flex-center" style={{ height: '60vh' }}>
                 <div className="spinner"></div>
             </div>
         );

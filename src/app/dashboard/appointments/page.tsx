@@ -32,19 +32,23 @@ export default function AppointmentsPage() {
     const [actualPrice, setActualPrice] = useState<string>('');
     const [completing, setCompleting] = useState(false);
 
+    const [mounted, setMounted] = useState(false);
+
     useEffect(() => {
+        setMounted(true);
         fetchAppointments();
     }, []);
 
     const fetchAppointments = async () => {
         try {
             const res = await fetch('/api/appointments');
+            if (!res.ok) throw new Error('Failed to fetch data');
             const data = await res.json();
             if (data.success && data.data?.appointments) {
                 setAppointments(data.data.appointments);
             }
         } catch (error) {
-            console.error(error);
+            console.error('Fetch Error:', error);
         } finally {
             setLoading(false);
         }
@@ -106,9 +110,9 @@ export default function AppointmentsPage() {
         return apt.status === filter;
     });
 
-    if (loading) {
+    if (!mounted || loading) {
         return (
-            <div className="flex-center" style={{ padding: 'var(--spacing-3xl)' }}>
+            <div className="flex-center" style={{ height: '60vh' }}>
                 <div className="spinner"></div>
             </div>
         );
@@ -251,7 +255,7 @@ export default function AppointmentsPage() {
                             }}>
                                 <div className="flex-between mb-sm">
                                     <span className="text-muted">المريض:</span>
-                                    <strong>{selectedAppointment.patient.name}</strong>
+                                    <strong>{selectedAppointment.patient?.name || 'غير معروف'}</strong>
                                 </div>
                                 <div className="flex-between mb-sm">
                                     <span className="text-muted">التاريخ:</span>
