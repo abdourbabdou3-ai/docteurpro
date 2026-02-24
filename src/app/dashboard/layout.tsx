@@ -105,6 +105,31 @@ export default function DashboardLayout({
                 )}
                 {children}
             </main>
+
+            {/* Bottom Nav for Mobile */}
+            <nav className="bottom-nav">
+                {menuItems.slice(0, 4).map((item) => (
+                    <Link
+                        key={item.href}
+                        href={item.href}
+                        className={`bottom-nav-link ${pathname === item.href ? 'active' : ''}`}
+                    >
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d={item.icon} />
+                        </svg>
+                        <span>{item.label}</span>
+                    </Link>
+                ))}
+                <Link
+                    href="/dashboard/profile"
+                    className={`bottom-nav-link ${pathname === '/dashboard/profile' ? 'active' : ''}`}
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    <span>الملف</span>
+                </Link>
+            </nav>
         </div>
     );
 }

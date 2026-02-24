@@ -18,6 +18,8 @@ export default function HomePage() {
     const [doctors, setDoctors] = useState<Doctor[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     useEffect(() => {
         fetch('/api/doctors?limit=6')
             .then((res) => res.json())
@@ -43,21 +45,31 @@ export default function HomePage() {
                         دكتور
                     </Link>
 
-                    <ul className="navbar-menu">
-                        <li><Link href="/" className="navbar-link active">الرئيسية</Link></li>
-                        <li><Link href="/doctors" className="navbar-link">الأطباء</Link></li>
-                        <li><Link href="/about" className="navbar-link">من نحن</Link></li>
-                        <li><Link href="/contact" className="navbar-link">تواصل معنا</Link></li>
+                    <ul className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
+                        <li><Link href="/" className="navbar-link active" onClick={() => setIsMenuOpen(false)}>الرئيسية</Link></li>
+                        <li><Link href="/doctors" className="navbar-link" onClick={() => setIsMenuOpen(false)}>الأطباء</Link></li>
+                        <li><Link href="/about" className="navbar-link" onClick={() => setIsMenuOpen(false)}>من نحن</Link></li>
+                        <li><Link href="/contact" className="navbar-link" onClick={() => setIsMenuOpen(false)}>تواصل معنا</Link></li>
+                        <li className="show-mobile" style={{ marginTop: 'var(--spacing-md)' }}>
+                            <Link href="/login" className="btn btn-ghost btn-block" onClick={() => setIsMenuOpen(false)}>تسجيل الدخول</Link>
+                        </li>
+                        <li className="show-mobile">
+                            <Link href="/register" className="btn btn-primary btn-block" onClick={() => setIsMenuOpen(false)}>انضم كطبيب</Link>
+                        </li>
                     </ul>
 
-                    <div className="navbar-actions">
+                    <div className="navbar-actions hidden-mobile">
                         <Link href="/login" className="btn btn-ghost">تسجيل الدخول</Link>
                         <Link href="/register" className="btn btn-primary">انضم كطبيب</Link>
                     </div>
 
-                    <button className="navbar-toggle" aria-label="القائمة">
+                    <button className="navbar-toggle" aria-label="القائمة" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M3 12h18M3 6h18M3 18h18" />
+                            {isMenuOpen ? (
+                                <path d="M18 6L6 18M6 6l12 12" />
+                            ) : (
+                                <path d="M3 12h18M3 6h18M3 18h18" />
+                            )}
                         </svg>
                     </button>
                 </div>

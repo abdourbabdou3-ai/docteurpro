@@ -28,6 +28,50 @@ interface Doctor {
     }>;
 }
 
+function Navbar() {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    return (
+        <nav className="navbar">
+            <div className="container navbar-container">
+                <Link href="/" className="navbar-brand">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <circle cx="20" cy="20" r="18" fill="#0066cc" />
+                        <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                    </svg>
+                    دكتور
+                </Link>
+
+                <ul className={`navbar-menu ${isMenuOpen ? 'open' : ''}`}>
+                    <li><Link href="/" className="navbar-link" onClick={() => setIsMenuOpen(false)}>الرئيسية</Link></li>
+                    <li><Link href="/doctors" className="navbar-link active" onClick={() => setIsMenuOpen(false)}>الأطباء</Link></li>
+                    <li><Link href="/about" className="navbar-link" onClick={() => setIsMenuOpen(false)}>من نحن</Link></li>
+                    <li className="show-mobile" style={{ marginTop: 'var(--spacing-md)' }}>
+                        <Link href="/login" className="btn btn-ghost btn-block" onClick={() => setIsMenuOpen(false)}>تسجيل الدخول</Link>
+                    </li>
+                    <li className="show-mobile">
+                        <Link href="/register" className="btn btn-primary btn-block" onClick={() => setIsMenuOpen(false)}>انضم كطبيب</Link>
+                    </li>
+                </ul>
+
+                <div className="navbar-actions hidden-mobile">
+                    <Link href="/doctors" className="btn btn-ghost">رجوع للأطباء</Link>
+                    <Link href="/login" className="btn btn-ghost">دخول</Link>
+                </div>
+
+                <button className="navbar-toggle" aria-label="القائمة" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        {isMenuOpen ? (
+                            <path d="M18 6L6 18M6 6l12 12" />
+                        ) : (
+                            <path d="M3 12h18M3 6h18M3 18h18" />
+                        )}
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    );
+}
+
 // Review Form Component
 function ReviewForm({ doctorId, onSuccess }: { doctorId: number; onSuccess: () => void }) {
     const [showForm, setShowForm] = useState(false);
@@ -276,20 +320,7 @@ export default function DoctorProfilePage() {
     return (
         <>
             {/* Navigation */}
-            <nav className="navbar">
-                <div className="container navbar-container">
-                    <Link href="/" className="navbar-brand">
-                        <svg viewBox="0 0 40 40" fill="none">
-                            <circle cx="20" cy="20" r="18" fill="#0066cc" />
-                            <path d="M20 10V30M10 20H30" stroke="white" strokeWidth="4" strokeLinecap="round" />
-                        </svg>
-                        دكتور
-                    </Link>
-                    <div className="navbar-actions">
-                        <Link href="/doctors" className="btn btn-ghost">رجوع للأطباء</Link>
-                    </div>
-                </div>
-            </nav>
+            <Navbar />
 
             <main style={{ minHeight: '80vh', padding: 'var(--spacing-xl) 0' }}>
                 <div className="container">
@@ -299,13 +330,14 @@ export default function DoctorProfilePage() {
                         </div>
                     )}
 
-                    <div className="grid" style={{ gridTemplateColumns: '1fr 350px', gap: 'var(--spacing-xl)', alignItems: 'start' }}>
+                    <div className="profile-grid">
                         {/* Main Content */}
                         <div>
                             {/* Doctor Header */}
                             <div className="card" style={{ marginBottom: 'var(--spacing-lg)' }}>
-                                <div style={{ display: 'flex', gap: 'var(--spacing-xl)', padding: 'var(--spacing-xl)' }}>
+                                <div className="doctor-profile-header-container" style={{ display: 'flex', gap: 'var(--spacing-xl)', padding: 'var(--spacing-xl)' }}>
                                     <div
+                                        className="mobile-header-image"
                                         style={{
                                             width: '150px',
                                             height: '150px',
@@ -315,16 +347,19 @@ export default function DoctorProfilePage() {
                                             alignItems: 'center',
                                             justifyContent: 'center',
                                             flexShrink: 0,
-                                            background: 'var(--gray-100)'
+                                            background: 'var(--gray-100)',
+                                            margin: '0 auto var(--spacing-md)'
                                         }}
                                     >
                                         {doctor.profileImage ? (
-                                            <Image
-                                                src={doctor.profileImage}
-                                                alt={doctor.name}
-                                                fill
-                                                style={{ objectFit: 'cover' }}
-                                            />
+                                            <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+                                                <Image
+                                                    src={doctor.profileImage}
+                                                    alt={doctor.name}
+                                                    fill
+                                                    style={{ objectFit: 'cover' }}
+                                                />
+                                            </div>
                                         ) : (
                                             <div style={{
                                                 width: '100%',
@@ -342,9 +377,9 @@ export default function DoctorProfilePage() {
                                         )}
                                     </div>
 
-                                    <div style={{ flex: 1 }}>
-                                        <h1 style={{ marginBottom: 'var(--spacing-sm)' }}>{doctor.name}</h1>
-                                        <p className="text-primary" style={{
+                                    <div className="doctor-profile-header-content" style={{ flex: 1 }}>
+                                        <h1 className="text-center-mobile" style={{ marginBottom: 'var(--spacing-sm)' }}>{doctor.name}</h1>
+                                        <p className="text-primary text-center-mobile" style={{
                                             fontSize: 'var(--font-size-lg)',
                                             fontWeight: '600',
                                             marginBottom: 'var(--spacing-md)'
@@ -352,7 +387,7 @@ export default function DoctorProfilePage() {
                                             {doctor.specialty}
                                         </p>
 
-                                        <div className="flex gap-lg flex-wrap">
+                                        <div className="flex gap-lg flex-wrap justify-center-mobile">
                                             <div className="flex gap-sm" style={{ color: 'var(--gray-600)' }}>
                                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -453,7 +488,7 @@ export default function DoctorProfilePage() {
                         </div>
 
                         {/* Sidebar - Booking */}
-                        <div className="card" style={{ position: 'sticky', top: '100px' }}>
+                        <div className="card booking-sidebar">
                             <div className="card-header">
                                 <h3 style={{ margin: 0 }}>احجز موعد</h3>
                             </div>
