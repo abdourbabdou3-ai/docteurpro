@@ -31,7 +31,7 @@ export default function RootLayout({
     return (
         <html lang="ar" dir="rtl" className={tajawal.variable}>
             <head>
-                <link rel="manifest" href="/manifest.json?v=15" />
+                <link rel="manifest" href="/manifest.json?v=16" />
                 <meta name="theme-color" content="#0066cc" />
                 <meta name="mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />

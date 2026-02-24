@@ -1,8 +1,8 @@
-const CACHE_NAME = 'tabib-dz-cache-v15';
+const CACHE_NAME = 'tabib-dz-cache-v16';
 const urlsToCache = [
     '/',
     '/dashboard',
-    '/manifest.json?v=15',
+    '/manifest.json?v=16',
     '/icons/icon-192.png',
     '/icons/icon-512.png'
 ];

@@ -6,25 +6,25 @@
     "theme_color": "#0066cc",
     "display": "standalone",
     "scope": "/",
-    "start_url": "/?v=15",
+    "start_url": "/?v=16",
     "dir": "rtl",
     "lang": "ar",
     "icons": [
         {
             "src": "/icons/icon-192.png",
-            "sizes": "192x192",
+            "sizes": "640x640",
             "type": "image/png",
             "purpose": "any"
         },
         {
             "src": "/icons/icon-512.png",
-            "sizes": "512x512",
+            "sizes": "640x640",
             "type": "image/png",
             "purpose": "any"
         },
         {
             "src": "/icons/icon-512.png",
-            "sizes": "512x512",
+            "sizes": "640x640",
             "type": "image/png",
             "purpose": "maskable"
         }
