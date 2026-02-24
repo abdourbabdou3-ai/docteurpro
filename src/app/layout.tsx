@@ -31,12 +31,12 @@ export default function RootLayout({
     return (
         <html lang="ar" dir="rtl" className={tajawal.variable}>
             <head>
-                <link rel="manifest" href="/manifest.json" />
+                <link rel="manifest" href="/manifest.json?v=1" />
                 <meta name="theme-color" content="#0066cc" />
                 <meta name="mobile-web-app-capable" content="yes" />
                 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
                 <meta name="apple-mobile-web-app-title" content="tabib-dz" />
-                <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+                <link rel="apple-touch-icon" href="/icons/medical-icon-192-v1.png" />
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `
