@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
 import { useEffect } from 'react';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export default function DashboardLayout({
     children,
@@ -30,8 +31,26 @@ export default function DashboardLayout({
         );
     }
 
-    if (!session || session.user.role !== 'DOCTOR') {
-        return null;
+    // Final safety check for session data
+    if (!session?.user) {
+        return (
+            <div className="flex-center" style={{ height: '100vh', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                <div className="spinner"></div>
+                <p className="text-muted">جاري تحميل بيانات الجلسة...</p>
+            </div>
+        );
+    }
+
+    if (session.user.role !== 'DOCTOR') {
+        return (
+            <div className="flex-center" style={{ height: '100vh', textAlign: 'center', padding: 'var(--spacing-xl)' }}>
+                <div>
+                    <h2 className="text-danger">غير مصرح</h2>
+                    <p className="text-muted">هذا الحساب لا يملك صلاحيات الوصول للوحة تحكم الأطباء</p>
+                    <Link href="/login" className="btn btn-primary mt-md">تسجيل الدخول كطبيب</Link>
+                </div>
+            </div>
+        );
     }
 
     const menuItems = [
@@ -75,7 +94,7 @@ export default function DashboardLayout({
                 <div style={{ marginTop: 'auto', paddingTop: 'var(--spacing-xl)', borderTop: '1px solid var(--gray-200)' }}>
                     <div style={{ marginBottom: 'var(--spacing-md)' }}>
                         <p style={{ fontWeight: '600', marginBottom: 'var(--spacing-xs)' }}>
-                            {session.user.doctorName || session.user.email}
+                            {session?.user?.doctorName || session?.user?.email || 'طبيب'}
                         </p>
                         <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
                             {session.user.email}
@@ -103,7 +122,9 @@ export default function DashboardLayout({
                         حسابك قيد المراجعة. بعض الميزات قد تكون محدودة حتى يتم الموافقة عليه.
                     </div>
                 )}
-                {children}
+                <ErrorBoundary>
+                    {children}
+                </ErrorBoundary>
             </main>
 
             {/* Bottom Nav for Mobile */}

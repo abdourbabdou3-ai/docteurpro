@@ -5,31 +5,49 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Format date to Arabic
-export function formatDateAr(date: Date | string): string {
-    const d = new Date(date);
-    return d.toLocaleDateString('ar-DZ', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-    });
+export function formatDateAr(date: Date | string | null | undefined): string {
+    if (!date) return '-';
+    try {
+        const d = new Date(date);
+        if (isNaN(d.getTime())) return '-';
+        return d.toLocaleDateString('ar-DZ', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    } catch (e) {
+        return '-';
+    }
 }
 
 // Format time to Arabic
-export function formatTimeAr(time: string): string {
-    const [hours, minutes] = time.split(':');
-    const h = parseInt(hours);
-    const period = h >= 12 ? 'مساءً' : 'صباحًا';
-    const displayHour = h > 12 ? h - 12 : h === 0 ? 12 : h;
-    return `${displayHour}:${minutes} ${period}`;
+export function formatTimeAr(time: string | null | undefined): string {
+    if (!time) return '-';
+    try {
+        const parts = time.split(':');
+        if (parts.length < 2) return time;
+        const [hours, minutes] = parts;
+        const h = parseInt(hours);
+        const period = h >= 12 ? 'مساءً' : 'صباحًا';
+        const displayHour = h > 12 ? h - 12 : h === 0 ? 12 : h;
+        return `${displayHour}:${minutes} ${period}`;
+    } catch (e) {
+        return time || '-';
+    }
 }
 
 // Format currency in DZD
-export function formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('ar-DZ', {
-        style: 'currency',
-        currency: 'DZD',
-        maximumFractionDigits: 0,
-    }).format(amount);
+export function formatCurrency(amount: number | null | undefined): string {
+    const val = amount || 0;
+    try {
+        return new Intl.NumberFormat('ar-DZ', {
+            style: 'currency',
+            currency: 'DZD',
+            maximumFractionDigits: 0,
+        }).format(val);
+    } catch (e) {
+        return `${val} دج`;
+    }
 }
 
 // Format file size

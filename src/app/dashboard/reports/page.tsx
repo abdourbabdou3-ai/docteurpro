@@ -45,7 +45,7 @@ export default function ReportsPage() {
             const result = await res.json();
 
             if (result.success) {
-                const appointments = result.data.appointments;
+                const appointments = result.data?.appointments || [];
                 const completed = appointments.filter((a: any) => a.status === 'COMPLETED');
                 const confirmed = appointments.filter((a: any) => a.status === 'CONFIRMED');
                 const cancelled = appointments.filter((a: any) => a.status === 'CANCELLED');
@@ -60,7 +60,7 @@ export default function ReportsPage() {
                     cancelledAppointments: cancelled.length,
                     pendingAppointments: pending.length,
                     totalEarnings: earnings,
-                    newPatients: new Set(appointments.map((a: any) => a.patient.id)).size,
+                    newPatients: new Set(appointments.map((a: any) => a.patient?.id).filter(Boolean)).size,
                     appointments: appointments.sort((a: any, b: any) =>
                         new Date(a.date).getTime() - new Date(b.date).getTime()
                     ),
@@ -242,11 +242,11 @@ export default function ReportsPage() {
                                 <tbody>
                                     {data.appointments.map((apt) => (
                                         <tr key={apt.id}>
-                                            <td><strong>{apt.patient.name}</strong></td>
-                                            <td>{apt.patient.phone}</td>
-                                            <td>{formatDateAr(apt.date)}</td>
-                                            <td>{apt.time}</td>
-                                            <td>
+                                            <td data-label="المريض"><strong>{apt.patient?.name || 'غير معروف'}</strong></td>
+                                            <td data-label="الهاتف">{apt.patient?.phone || '-'}</td>
+                                            <td data-label="التاريخ">{formatDateAr(apt.date)}</td>
+                                            <td data-label="الوقت">{apt.time || '-'}</td>
+                                            <td data-label="الحالة">
                                                 <span className={`badge badge-${apt.status === 'COMPLETED' ? 'success' :
                                                     apt.status === 'CANCELLED' ? 'danger' :
                                                         apt.status === 'CONFIRMED' ? 'primary' : 'warning'

@@ -40,7 +40,7 @@ export default function AppointmentsPage() {
         try {
             const res = await fetch('/api/appointments');
             const data = await res.json();
-            if (data.success) {
+            if (data.success && data.data?.appointments) {
                 setAppointments(data.data.appointments);
             }
         } catch (error) {

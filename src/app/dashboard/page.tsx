@@ -303,16 +303,16 @@ export default function DashboardPage() {
                             <tbody>
                                 {stats.recentAppointments.map((apt) => (
                                     <tr key={apt.id}>
-                                        <td>
+                                        <td data-label="المريض">
                                             <div>
-                                                <strong>{apt.patient.name}</strong>
+                                                <strong>{apt.patient?.name || 'غير معروف'}</strong>
                                                 <br />
-                                                <small className="text-muted">{apt.patient.phone}</small>
+                                                <small className="text-muted">{apt.patient?.phone || '-'}</small>
                                             </div>
                                         </td>
-                                        <td>{formatDateAr(apt.date)}</td>
-                                        <td>{formatTimeAr(apt.time)}</td>
-                                        <td>
+                                        <td data-label="التاريخ">{formatDateAr(apt.date)}</td>
+                                        <td data-label="الوقت">{formatTimeAr(apt.time)}</td>
+                                        <td data-label="الحالة">
                                             <span className={`badge badge-${apt.status === 'PENDING' ? 'warning' :
                                                 apt.status === 'CONFIRMED' ? 'primary' :
                                                     apt.status === 'COMPLETED' ? 'success' : 'danger'

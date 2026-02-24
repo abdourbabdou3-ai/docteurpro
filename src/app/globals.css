@@ -735,7 +735,7 @@ a:hover {
   }
 
   .table {
-    min-width: 600px;
+    min-width: 100%;
   }
 
   .btn {
@@ -1198,8 +1198,8 @@ a:hover {
   }
 
   .container {
-    padding-left: var(--spacing-lg) !important;
-    padding-right: var(--spacing-lg) !important;
+    padding-left: var(--spacing-md) !important;
+    padding-right: var(--spacing-md) !important;
   }
 
   :root {
@@ -1280,6 +1280,7 @@ a:hover {
   .table-container {
     background: transparent;
     box-shadow: none;
+    overflow-x: hidden;
   }
 
   .table,
@@ -1288,7 +1289,7 @@ a:hover {
   .table th,
   .table td,
   .table tr {
-    display: block;
+    display: block !important;
   }
 
   .table thead tr {
@@ -1302,20 +1303,16 @@ a:hover {
     margin-bottom: var(--spacing-md);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-sm);
-    padding: var(--spacing-sm);
+    padding: var(--spacing-md) !important;
   }
 
   .table td {
     border: none;
-    display: block !important;
-    padding: var(--spacing-sm) 0 !important;
-    text-align: right !important;
     width: 100% !important;
+    padding: var(--spacing-sm) 0 !important;
     border-bottom: 1px solid var(--gray-50);
-    position: relative;
-    padding-right: 120px !important;
-    /* Fixed space for label */
-    min-height: 2.25rem;
+    text-align: right !important;
+    min-height: auto;
   }
 
   .table td:last-child {
@@ -1324,70 +1321,20 @@ a:hover {
 
   .table td:before {
     content: attr(data-label);
-    display: block;
+    display: block !important;
     font-weight: 700;
-    color: var(--gray-500);
+    color: var(--gray-600);
     font-size: 0.75rem;
     margin-bottom: 4px;
     text-align: right;
   }
 
-  /* Content of the td */
   .table td>* {
-    display: block;
-    width: 100%;
-    word-break: break-word;
-    text-align: right;
-  }
-
-  /* Mobile Cards */
-  .grid-2,
-  .grid-3 {
-    grid-template-columns: 1fr !important;
-    gap: var(--spacing-md) !important;
-  }
-
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: var(--spacing-sm) !important;
-  }
-
-  @media (max-width: 360px) {
-    .stats-grid {
-      grid-template-columns: 1fr !important;
-    }
-
-    .table td {
-      padding-right: 45% !important;
-    }
-
-    .table td:before {
-      width: 40%;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .container {
-      padding-left: var(--spacing-md) !important;
-      padding-right: var(--spacing-md) !important;
-    }
-
-    .table td {
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 4px;
-    }
-
-    .table td:before {
-      width: 100%;
-      text-align: right;
-    }
-
-    .table td>* {
-      width: 100%;
-      justify-content: flex-start;
-      text-align: right;
-    }
+    display: block !important;
+    width: 100% !important;
+    word-break: break-word !important;
+    text-align: right !important;
+    padding-bottom: var(--spacing-xs);
   }
 
   .mobile-column {

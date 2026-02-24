@@ -25,7 +25,7 @@ export default function PatientsPage() {
             const params = search ? `?search=${encodeURIComponent(search)}` : '';
             const res = await fetch(`/api/patients${params}`);
             const data = await res.json();
-            if (data.success) {
+            if (data.success && data.data?.patients) {
                 setPatients(data.data.patients);
             }
         } catch (error) {
