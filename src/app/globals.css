@@ -1191,6 +1191,12 @@ a:hover {
 
 /* ========== Responsive ========== */
 @media (max-width: 768px) {
+  body {
+    overflow-x: hidden !important;
+    position: relative;
+    width: 100%;
+  }
+
   .container {
     padding-left: var(--spacing-lg) !important;
     padding-right: var(--spacing-lg) !important;
@@ -1301,16 +1307,17 @@ a:hover {
 
   .table td {
     border: none;
-    position: relative;
-    padding-right: 40% !important;
-    padding-left: var(--spacing-sm) !important;
-    text-align: right !important;
-    white-space: normal;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    flex-wrap: wrap !important;
+    padding: var(--spacing-sm) var(--spacing-md) !important;
     min-height: 2.5rem;
-    display: flex;
-    align-items: center;
     border-bottom: 1px solid var(--gray-50);
-    overflow: hidden;
+    gap: var(--spacing-md);
+    text-align: left !important;
+    /* Left alignment for data in RTL environment */
+    width: 100% !important;
   }
 
   .table td:last-child {
@@ -1318,20 +1325,24 @@ a:hover {
   }
 
   .table td:before {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 35%;
-    padding-right: var(--spacing-sm);
-    white-space: nowrap;
     content: attr(data-label);
     font-weight: 700;
-    color: var(--gray-400);
-    text-align: right;
+    color: var(--gray-500);
     font-size: 0.75rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: fit-content;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* Target the content of the td */
+  .table td>* {
+    max-width: 100%;
+    word-break: break-word;
+    text-align: left;
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
   }
 
   /* Mobile Cards */
@@ -1357,6 +1368,30 @@ a:hover {
 
     .table td:before {
       width: 40%;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      padding-left: var(--spacing-md) !important;
+      padding-right: var(--spacing-md) !important;
+    }
+
+    .table td {
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      gap: 4px;
+    }
+
+    .table td:before {
+      width: 100%;
+      text-align: right;
+    }
+
+    .table td>* {
+      width: 100%;
+      justify-content: flex-start;
+      text-align: right;
     }
   }
 
