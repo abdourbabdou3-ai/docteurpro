@@ -1191,6 +1191,11 @@ a:hover {
 
 /* ========== Responsive ========== */
 @media (max-width: 768px) {
+  .container {
+    padding-left: var(--spacing-lg) !important;
+    padding-right: var(--spacing-lg) !important;
+  }
+
   :root {
     --font-size-4xl: 1.875rem;
     --font-size-5xl: 2.25rem;
@@ -1297,13 +1302,15 @@ a:hover {
   .table td {
     border: none;
     position: relative;
-    padding-right: 45% !important;
+    padding-right: 40% !important;
+    padding-left: var(--spacing-sm) !important;
     text-align: right !important;
     white-space: normal;
     min-height: 2.5rem;
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--gray-50);
+    overflow: hidden;
   }
 
   .table td:last-child {
@@ -1315,14 +1322,16 @@ a:hover {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    width: 40%;
+    width: 35%;
     padding-right: var(--spacing-sm);
     white-space: nowrap;
     content: attr(data-label);
     font-weight: 700;
-    color: var(--gray-500);
+    color: var(--gray-400);
     text-align: right;
-    font-size: var(--font-size-xs);
+    font-size: 0.75rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* Mobile Cards */
@@ -1335,6 +1344,20 @@ a:hover {
   .stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: var(--spacing-sm) !important;
+  }
+
+  @media (max-width: 360px) {
+    .stats-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .table td {
+      padding-right: 45% !important;
+    }
+
+    .table td:before {
+      width: 40%;
+    }
   }
 
   .mobile-column {
