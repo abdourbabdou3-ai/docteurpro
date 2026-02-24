@@ -79,6 +79,7 @@ export default function ReportsPage() {
     }, []);
 
     useEffect(() => {
+        setMounted(true);
         fetchReportData();
     }, [fetchReportData]);
 
