@@ -110,7 +110,7 @@ export default function AppointmentsPage() {
         return apt.status === filter;
     });
 
-    if (!mounted || loading) {
+    if (!mounted) {
         return (
             <div className="flex-center" style={{ height: '60vh' }}>
                 <div className="spinner"></div>
@@ -119,7 +119,7 @@ export default function AppointmentsPage() {
     }
 
     return (
-        <>
+        <div className="appointments-page">
             <div className="flex-between mb-xl">
                 <div>
                     <h1 style={{ marginBottom: 'var(--spacing-xs)' }}>المواعيد</h1>
@@ -149,111 +149,113 @@ export default function AppointmentsPage() {
             </div>
 
             {/* Appointments View */}
-            <div className="appointments-content">
-                {filteredAppointments.length === 0 ? (
-                    <div className="card text-center" style={{ padding: 'var(--spacing-3xl)' }}>
-                        <div style={{ opacity: 0.3, marginBottom: 'var(--spacing-md)' }}>
-                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                                <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                        <p className="text-muted">لا توجد مواعيد حالياً</p>
+            {loading ? (
+                <div className="flex-center" style={{ padding: 'var(--spacing-3xl)' }}>
+                    <div className="spinner"></div>
+                </div>
+            ) : filteredAppointments.length === 0 ? (
+                <div className="card text-center" style={{ padding: 'var(--spacing-3xl)' }}>
+                    <div style={{ opacity: 0.3, marginBottom: 'var(--spacing-md)' }}>
+                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                            <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
                     </div>
-                ) : (
-                    <>
-                        {/* Desktop Table - Hidden on small mobile */}
-                        <div className="table-container hidden-mobile">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th>المريض</th>
-                                        <th>التاريخ / الوقت</th>
-                                        <th>الحالة</th>
-                                        <th>المبلغ</th>
-                                        <th>الإجراءات</th>
+                    <p className="text-muted">لا توجد مواعيد حالياً</p>
+                </div>
+            ) : (
+                <div className="appointments-content">
+                    {/* Desktop Table - Hidden on small mobile */}
+                    <div className="table-container hidden-mobile">
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th>المريض</th>
+                                    <th>التاريخ / الوقت</th>
+                                    <th>الحالة</th>
+                                    <th>المبلغ</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {filteredAppointments.map((apt) => (
+                                    <tr key={apt.id}>
+                                        <td>
+                                            <strong>{apt?.patient?.name || 'غير معروف'}</strong>
+                                            <div className="text-muted" style={{ fontSize: 'var(--font-size-xs)' }}>{apt?.patient?.phone || '-'}</div>
+                                        </td>
+                                        <td>
+                                            <div>{formatDateAr(apt?.date)}</div>
+                                            <div className="text-muted">{formatTimeAr(apt?.time)}</div>
+                                        </td>
+                                        <td>
+                                            <span className={`badge badge-${apt?.status === 'PENDING' ? 'warning' :
+                                                apt?.status === 'CONFIRMED' ? 'primary' :
+                                                    apt?.status === 'COMPLETED' ? 'success' : 'danger'
+                                                }`}>
+                                                {appointmentStatusAr[apt?.status || ''] || apt?.status || '-'}
+                                            </span>
+                                        </td>
+                                        <td>{apt?.actualPrice ? formatCurrency(apt.actualPrice) : '-'}</td>
+                                        <td>
+                                            <div className="flex gap-xs">
+                                                {apt?.status === 'PENDING' && (
+                                                    <>
+                                                        <button className="btn btn-success btn-sm" onClick={() => updateStatus(apt.id, 'CONFIRMED')}>تأكيد</button>
+                                                        <button className="btn btn-danger btn-sm" onClick={() => updateStatus(apt.id, 'CANCELLED')}>إلغاء</button>
+                                                    </>
+                                                )}
+                                                {apt?.status === 'CONFIRMED' && (
+                                                    <button className="btn btn-secondary btn-sm" onClick={() => openCompleteModal(apt)}>إتمام</button>
+                                                )}
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredAppointments.map((apt) => (
-                                        <tr key={apt.id}>
-                                            <td>
-                                                <strong>{apt.patient?.name || 'غير معروف'}</strong>
-                                                <div className="text-muted" style={{ fontSize: 'var(--font-size-xs)' }}>{apt.patient?.phone || '-'}</div>
-                                            </td>
-                                            <td>
-                                                <div>{formatDateAr(apt.date)}</div>
-                                                <div className="text-muted">{formatTimeAr(apt.time)}</div>
-                                            </td>
-                                            <td>
-                                                <span className={`badge badge-${apt.status === 'PENDING' ? 'warning' :
-                                                    apt.status === 'CONFIRMED' ? 'primary' :
-                                                        apt.status === 'COMPLETED' ? 'success' : 'danger'
-                                                    }`}>
-                                                    {appointmentStatusAr[apt.status] || apt.status}
-                                                </span>
-                                            </td>
-                                            <td>{apt.actualPrice ? formatCurrency(apt.actualPrice) : '-'}</td>
-                                            <td>
-                                                <div className="flex gap-xs">
-                                                    {apt.status === 'PENDING' && (
-                                                        <>
-                                                            <button className="btn btn-success btn-sm" onClick={() => updateStatus(apt.id, 'CONFIRMED')}>تأكيد</button>
-                                                            <button className="btn btn-danger btn-sm" onClick={() => updateStatus(apt.id, 'CANCELLED')}>إلغاء</button>
-                                                        </>
-                                                    )}
-                                                    {apt.status === 'CONFIRMED' && (
-                                                        <button className="btn btn-secondary btn-sm" onClick={() => openCompleteModal(apt)}>إتمام</button>
-                                                    )}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
 
-                        {/* Mobile Cards - Shown only on mobile */}
-                        <div className="show-mobile">
-                            {filteredAppointments.map((apt) => (
-                                <div key={apt.id} className="card mb-md" style={{ padding: 'var(--spacing-md)' }}>
-                                    <div className="flex-between mb-sm">
-                                        <strong>{apt.patient?.name || 'غير معروف'}</strong>
-                                        <span className={`badge badge-${apt.status === 'PENDING' ? 'warning' :
-                                            apt.status === 'CONFIRMED' ? 'primary' :
-                                                apt.status === 'COMPLETED' ? 'success' : 'danger'
-                                            }`}>
-                                            {appointmentStatusAr[apt.status] || apt.status}
-                                        </span>
-                                    </div>
-                                    <div className="text-muted mb-sm" style={{ fontSize: 'var(--font-size-sm)' }}>
-                                        {apt.patient?.phone}
-                                    </div>
-                                    <div className="flex-between mb-md">
-                                        <div>
-                                            <div style={{ fontSize: 'var(--font-size-sm)' }}>{formatDateAr(apt.date)}</div>
-                                            <div className="text-muted" style={{ fontSize: 'var(--font-size-xs)' }}>{formatTimeAr(apt.time)}</div>
-                                        </div>
-                                        {apt.actualPrice && (
-                                            <div className="text-success" style={{ fontWeight: '600' }}>{formatCurrency(apt.actualPrice)}</div>
-                                        )}
-                                    </div>
-                                    <div className="flex gap-sm">
-                                        {apt.status === 'PENDING' && (
-                                            <>
-                                                <button className="btn btn-success btn-sm flex-1" onClick={() => updateStatus(apt.id, 'CONFIRMED')}>تأكيد</button>
-                                                <button className="btn btn-danger btn-sm flex-1" onClick={() => updateStatus(apt.id, 'CANCELLED')}>إلغاء</button>
-                                            </>
-                                        )}
-                                        {apt.status === 'CONFIRMED' && (
-                                            <button className="btn btn-secondary btn-sm btn-block" onClick={() => openCompleteModal(apt)}>إتمام الموعد</button>
-                                        )}
-                                    </div>
+                    {/* Mobile Cards - Shown only on mobile */}
+                    <div className="show-mobile">
+                        {filteredAppointments.map((apt) => (
+                            <div key={apt.id} className="card mb-md" style={{ padding: 'var(--spacing-md)' }}>
+                                <div className="flex-between mb-sm">
+                                    <strong>{apt?.patient?.name || 'غير معروف'}</strong>
+                                    <span className={`badge badge-${apt?.status === 'PENDING' ? 'warning' :
+                                        apt?.status === 'CONFIRMED' ? 'primary' :
+                                            apt?.status === 'COMPLETED' ? 'success' : 'danger'
+                                        }`}>
+                                        {appointmentStatusAr[apt?.status || ''] || apt?.status || '-'}
+                                    </span>
                                 </div>
-                            ))}
-                        </div>
-                    </>
-                )}
-            </div>
+                                <div className="text-muted mb-sm" style={{ fontSize: 'var(--font-size-sm)' }}>
+                                    {apt?.patient?.phone || '-'}
+                                </div>
+                                <div className="flex-between mb-md">
+                                    <div>
+                                        <div style={{ fontSize: 'var(--font-size-sm)' }}>{formatDateAr(apt?.date)}</div>
+                                        <div className="text-muted" style={{ fontSize: 'var(--font-size-xs)' }}>{formatTimeAr(apt?.time)}</div>
+                                    </div>
+                                    {apt?.actualPrice && (
+                                        <div className="text-success" style={{ fontWeight: '600' }}>{formatCurrency(apt.actualPrice)}</div>
+                                    )}
+                                </div>
+                                <div className="flex gap-sm">
+                                    {apt?.status === 'PENDING' && (
+                                        <>
+                                            <button className="btn btn-success btn-sm flex-1" onClick={() => updateStatus(apt.id, 'CONFIRMED')}>تأكيد</button>
+                                            <button className="btn btn-danger btn-sm flex-1" onClick={() => updateStatus(apt.id, 'CANCELLED')}>إلغاء</button>
+                                        </>
+                                    )}
+                                    {apt?.status === 'CONFIRMED' && (
+                                        <button className="btn btn-secondary btn-sm btn-block" onClick={() => openCompleteModal(apt)}>إتمام الموعد</button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
 
             {/* Complete Appointment Modal */}
             {showCompleteModal && selectedAppointment && (
@@ -276,15 +278,15 @@ export default function AppointmentsPage() {
                             }}>
                                 <div className="flex-between mb-sm">
                                     <span className="text-muted">المريض:</span>
-                                    <strong>{selectedAppointment.patient?.name || 'غير معروف'}</strong>
+                                    <strong>{selectedAppointment?.patient?.name || 'غير معروف'}</strong>
                                 </div>
                                 <div className="flex-between mb-sm">
                                     <span className="text-muted">التاريخ:</span>
-                                    <span>{formatDateAr(selectedAppointment.date)}</span>
+                                    <span>{formatDateAr(selectedAppointment?.date)}</span>
                                 </div>
                                 <div className="flex-between">
                                     <span className="text-muted">الوقت:</span>
-                                    <span>{formatTimeAr(selectedAppointment.time)}</span>
+                                    <span>{formatTimeAr(selectedAppointment?.time)}</span>
                                 </div>
                             </div>
 
@@ -299,7 +301,7 @@ export default function AppointmentsPage() {
                                     min="0"
                                     style={{ fontSize: 'var(--font-size-xl)', textAlign: 'center' }}
                                 />
-                                {selectedAppointment.doctor?.priceRange && (
+                                {selectedAppointment?.doctor?.priceRange && (
                                     <small className="text-muted">
                                         السعر الافتراضي: {selectedAppointment.doctor.priceRange}
                                     </small>
@@ -321,6 +323,6 @@ export default function AppointmentsPage() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

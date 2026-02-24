@@ -42,17 +42,16 @@ export default function PatientsPage() {
     }, []);
 
     useEffect(() => {
-        fetchPatients();
-    }, [fetchPatients]);
+        if (!mounted) return;
 
-    useEffect(() => {
         const timer = setTimeout(() => {
             fetchPatients();
         }, 300);
-        return () => clearTimeout(timer);
-    }, [search, fetchPatients]);
 
-    if (!mounted || loading) {
+        return () => clearTimeout(timer);
+    }, [search, fetchPatients, mounted]);
+
+    if (!mounted) {
         return (
             <div className="flex-center" style={{ height: '60vh' }}>
                 <div className="spinner"></div>
@@ -132,7 +131,7 @@ export default function PatientsPage() {
                                     <span className="badge badge-info">{patient?.appointmentCount || 0} زيارات</span>
                                 </div>
                                 <div className="text-muted mb-sm" style={{ fontSize: 'var(--font-size-sm)' }}>
-                                    {patient?.phone}
+                                    {patient?.phone || '-'}
                                 </div>
                                 <div className="flex-between align-center">
                                     <div className="text-muted" style={{ fontSize: 'var(--font-size-xs)' }}>
@@ -146,6 +145,11 @@ export default function PatientsPage() {
                         ))}
                     </div>
                 </>
+            )}
+            {loading && (
+                <div className="flex-center" style={{ padding: 'var(--spacing-3xl)' }}>
+                    <div className="spinner"></div>
+                </div>
             )}
         </>
     );
