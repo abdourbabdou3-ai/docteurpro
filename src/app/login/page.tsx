@@ -1,15 +1,27 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import { useState, useEffect } from 'react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 export default function LoginPage() {
     const router = useRouter();
+    const { data: session, status } = useSession();
+
     const [form, setForm] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (status === 'authenticated') {
+            if (session?.user?.role === 'ADMIN') {
+                router.push('/admin');
+            } else {
+                router.push('/dashboard');
+            }
+        }
+    }, [status, session, router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

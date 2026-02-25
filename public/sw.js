@@ -17,13 +17,18 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    // Skip cross-origin requests
+    if (!event.request.url.startsWith(self.location.origin)) return;
+
     event.respondWith(
-        caches.match(event.request)
+        fetch(event.request)
             .then((response) => {
-                if (response) {
-                    return response;
-                }
-                return fetch(event.request);
+                // Optionally update cache here if needed
+                return response;
+            })
+            .catch(() => {
+                // Fallback to cache if offline
+                return caches.match(event.request);
             })
     );
 });
