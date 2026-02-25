@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 interface Doctor {
     id: number;
@@ -15,6 +17,9 @@ interface Doctor {
 }
 
 export default function HomePage() {
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
     const [doctors, setDoctors] = useState<Doctor[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -22,6 +27,16 @@ export default function HomePage() {
 
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
     const [showInstallBtn, setShowInstallBtn] = useState(false);
+
+    useEffect(() => {
+        if (status === 'authenticated' && session?.user) {
+            if (session.user.role === 'ADMIN') {
+                router.push('/admin');
+            } else {
+                router.push('/dashboard');
+            }
+        }
+    }, [status, session, router]);
 
     useEffect(() => {
         window.addEventListener('beforeinstallprompt', (e) => {
